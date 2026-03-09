@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1280, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>班级宠物乐园 </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/hydrogen-js-sdk/dist/Bmob-2.5.0.min.js"></script>
@@ -349,6 +349,55 @@
         .gold-glow {
             box-shadow: 0 0 20px rgba(251, 191, 36, 0.5), inset 0 0 10px rgba(251, 191, 36, 0.3);
             border-color: #fbbf24 !important;
+        }
+    /* ================= 📱 终极全端响应式 App 适配引擎 ================= */
+        @media (max-width: 1024px) {
+            /* 1. 基础布局压缩，释放屏幕空间 */
+            body { padding: 0.5rem !important; gap: 0.5rem !important; }
+            .flex-grow.gap-4.overflow-hidden { flex-direction: column !important; gap: 0.5rem !important; }
+            
+            /* 2. ⭐️ 顶部智能金刚区 (手机自动3列2行，平板自动6列1行) */
+            header { flex-direction: column !important; padding: 0.75rem !important; gap: 0.75rem !important; border-radius: 1.5rem !important; height: auto !important; }
+            header > div:first-child { width: 100% !important; justify-content: space-between !important; }
+            header h1 { font-size: 1.25rem !important; }
+            header > div:last-child { 
+                width: 100% !important; display: grid !important; 
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)) !important; 
+                gap: 0.5rem !important; margin-top: 0.25rem !important;
+            }
+            header .btn-clash { 
+                margin: 0 !important; padding: 0.6rem 0.2rem !important; font-size: 0.8rem !important; 
+                border-bottom-width: 4px !important; border-radius: 0.75rem !important;
+                display: flex !important; justify-content: center !important; align-items: center !important;
+                white-space: nowrap !important; letter-spacing: -0.5px !important; width: 100% !important;
+            }
+
+            /* 3. 左侧控制台：底部横向滑动工具栏 */
+            .sidebar-left { width: 100% !important; flex-direction: row !important; overflow-x: auto !important; padding-bottom: 0.25rem !important; flex-shrink: 0 !important; }
+            .sidebar-left > div:first-child { flex-direction: row !important; width: max-content !important; padding: 0.5rem 1rem !important; gap: 1rem !important; border-radius: 1.5rem !important; margin-bottom: 0 !important; }
+            .sidebar-left .w-full.h-\\[2px\\] { width: 2px !important; height: auto !important; min-height: 20px; }
+            .sidebar-left > button { width: auto !important; padding: 0.5rem 1.5rem !important; margin-top: 0 !important; border-radius: 1.5rem !important; white-space: nowrap; }
+            
+            /* 4. 中间主战场：智能双列网格 */
+            .center-content { padding: 0.75rem !important; border-radius: 1.5rem !important; }
+            #paradise-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 0.5rem !important; }
+            .student-card { min-height: 200px !important; padding: 0.75rem !important; border-radius: 1rem !important; border-width: 2px !important; }
+            .student-card .w-28 { width: 4.5rem !important; height: 4.5rem !important; border-radius: 1rem !important; }
+            .student-card .text-lg { font-size: 0.95rem !important; margin-bottom: 0.25rem !important; }
+            .btn-control { width: 28px !important; height: 28px !important; font-size: 16px !important; border-width: 2px !important; }
+            
+            /* 5. ⭐️ 右侧积分榜：变身悬浮侧滑抽屉 (不挤压主屏幕) */
+            .sidebar-right-container { position: fixed !important; right: 0 !important; top: 0 !important; height: 100vh !important; z-index: 999 !important; width: 100vw !important; background: rgba(0,0,0,0.5) !important; justify-content: flex-end !important; transition: background 0.3s ease !important; margin: 0 !important; }
+            .sidebar-right-container.collapsed { width: 0 !important; background: transparent !important; pointer-events: none !important; }
+            .sidebar-right-container.collapsed .sidebar-right { transform: translateX(100%); }
+            .sidebar-right { width: 85% !important; max-width: 300px !important; border-radius: 1.5rem 0 0 1.5rem !important; border: none !important; height: 100% !important; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1) !important; transform: translateX(0); background: var(--card-bg) !important; }
+            .rank-toggle-tab { left: -38px !important; width: 38px !important; font-size: 0.9rem !important; padding: 12px 0 !important; border-radius: 12px 0 0 12px !important; top: 60% !important; pointer-events: auto !important; box-shadow: -4px 0 10px rgba(0,0,0,0.1) !important; }
+            
+            /* 6. 性能救星：关闭高耗能特效，彻底告别手机点加分的卡顿 */
+            * { touch-action: manipulation; }
+            .animate-float { animation: none !important; transform: translateY(0) !important; }
+            .student-card:hover { transform: none !important; }
+            .firework-p { box-shadow: none !important; }
         }
     </style>
 </head>
@@ -1052,57 +1101,60 @@
 
         // ================= 云端自动同步引擎 =================
         let saveTimeout = null;
-        let cloudClassIdMap = {}; // 记录每个班级的云端抽屉号
+        let cloudClassIdMap = {}; 
+        let pendingSaveClassIds = new Set(); // 🚀 新增：待保存队列，解决快速切班级丢数据的问题
 
         function saveStateToLocal() { 
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); 
+            pendingSaveClassIds.add(state.currentClassId); // 操作必入列
             
             if(saveTimeout) clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => {
                 if (currentCloudDataId && Bmob.User.current()) {
                     const username = Bmob.User.current().username;
 
-                    // 1. 拆包：把沉重的班级详细数据剥离出来
                     const cloudState = JSON.parse(JSON.stringify(state));
                     cloudState.history = []; 
                     const fullClassesData = cloudState.classes;
                     cloudState.classes = fullClassesData.map(c => ({ id: c.id, name: c.name, students: [], groups: [] }));
 
-                    // 2. 更新全局大厅 
                     const query = Bmob.Query('CloudSaveData');
                     query.set('id', currentCloudDataId); 
                     query.set('appData', JSON.stringify(cloudState)); 
                     query.save().catch(err => console.error("全局保存异常:", err));
 
-                    // 3. 更新当前专属班级房间
-                    const currentCls = fullClassesData.find(c => c.id === state.currentClassId);
-                    if (currentCls) {
-                        if (cloudClassIdMap[currentCls.id]) {
-                            const updateQ = Bmob.Query('CloudClassData');
-                            updateQ.set('id', cloudClassIdMap[currentCls.id]);
-                            updateQ.set('classData', JSON.stringify(currentCls));
-                            updateQ.save();
-                        } else {
-                            const findQ = Bmob.Query('CloudClassData');
-                            findQ.equalTo('username', '==', username);
-                            findQ.equalTo('classId', '==', currentCls.id);
-                            findQ.find().then(res => {
-                                if (res.length > 0) {
-                                    cloudClassIdMap[currentCls.id] = res[0].objectId;
-                                    const updateQ = Bmob.Query('CloudClassData');
-                                    updateQ.set('id', res[0].objectId);
-                                    updateQ.set('classData', JSON.stringify(currentCls));
-                                    updateQ.save();
-                                } else {
-                                    const insertQ = Bmob.Query('CloudClassData');
-                                    insertQ.set('username', username);
-                                    insertQ.set('classId', currentCls.id);
-                                    insertQ.set('classData', JSON.stringify(currentCls));
-                                    insertQ.save().then(r => cloudClassIdMap[currentCls.id] = r.objectId);
-                                }
-                            });
+                    // 一口气把发生变化的班级全部存好
+                    pendingSaveClassIds.forEach(classIdToSave => {
+                        const currentCls = fullClassesData.find(c => c.id === classIdToSave);
+                        if (currentCls) {
+                            if (cloudClassIdMap[currentCls.id]) {
+                                const updateQ = Bmob.Query('CloudClassData');
+                                updateQ.set('id', cloudClassIdMap[currentCls.id]);
+                                updateQ.set('classData', JSON.stringify(currentCls));
+                                updateQ.save();
+                            } else {
+                                const findQ = Bmob.Query('CloudClassData');
+                                findQ.equalTo('username', '==', username);
+                                findQ.equalTo('classId', '==', currentCls.id);
+                                findQ.find().then(res => {
+                                    if (res.length > 0) {
+                                        cloudClassIdMap[currentCls.id] = res[0].objectId;
+                                        const updateQ = Bmob.Query('CloudClassData');
+                                        updateQ.set('id', res[0].objectId);
+                                        updateQ.set('classData', JSON.stringify(currentCls));
+                                        updateQ.save();
+                                    } else {
+                                        const insertQ = Bmob.Query('CloudClassData');
+                                        insertQ.set('username', username);
+                                        insertQ.set('classId', currentCls.id);
+                                        insertQ.set('classData', JSON.stringify(currentCls));
+                                        insertQ.save().then(r => cloudClassIdMap[currentCls.id] = r.objectId);
+                                    }
+                                });
+                            }
                         }
-                    }
+                    });
+                    pendingSaveClassIds.clear();
                 }
             }, 1500); 
         }
@@ -1113,10 +1165,10 @@
             const snapshot = JSON.parse(JSON.stringify(state));
             delete snapshot.history;
             state.history.push({ snapshot, desc });
+            // 🚀 核心：历史步数压缩到 10 步，彻底解决本地内存撑爆死机问题
             if (state.history.length > 10) state.history.shift(); 
             saveStateToLocal();
         }
-
         function undoAction() {
             if (!state.history || !state.history.length) return;
             const currentHistory = state.history;
