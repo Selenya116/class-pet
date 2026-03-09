@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>班级宠物乐园 </title>
-    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/hydrogen-js-sdk/dist/Bmob-2.5.0.min.js"></script>
     <style>
         /* 主题变量定义 */
@@ -139,17 +139,16 @@
         }
 
         body { 
+            /* 这里换成了最标准的系统黑体：苹果电脑自动用萍方黑体，Windows自动用微软雅黑 */
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; 
             background-color: var(--bg-color); 
             color: var(--primary-text);
-            min-height: 100vh; 
-            overflow-x: hidden;
-            overflow-y: auto; 
+            height: 100vh; 
+            overflow: hidden; 
             font-size: 18px; 
             transition: background-color 0.3s ease, color 0.3s ease;
-            display: flex;
-            flex-direction: column;
         }
+
         /* 应用主题变量到特定结构，并使用 !important 覆盖 Tailwind */
         header, main, aside > div, .student-card, .sidebar-right, 
         .modal-enter > div:last-child {
@@ -351,36 +350,54 @@
             box-shadow: 0 0 20px rgba(251, 191, 36, 0.5), inset 0 0 10px rgba(251, 191, 36, 0.3);
             border-color: #fbbf24 !important;
         }
-    @media (max-width: 1024px) {
-            body { height: auto !important; padding: 0.5rem !important; }
-            .flex-grow.gap-4.overflow-hidden { flex-direction: column !important; height: auto !important; overflow: visible !important; }
+    /* ================= 📱 终极全端响应式 App 适配引擎 ================= */
+        @media (max-width: 1024px) {
+            /* 1. 基础布局压缩，释放屏幕空间 */
+            body { padding: 0.5rem !important; gap: 0.5rem !important; }
+            .flex-grow.gap-4.overflow-hidden { flex-direction: column !important; gap: 0.5rem !important; }
             
-            .sidebar-left { 
-                width: 100% !important; 
-                flex-direction: row !important; 
-                position: sticky !important;
-                top: 0;
-                z-index: 100;
-                background: var(--bg-color);
-                padding: 0.5rem !important;
+            /* 2. ⭐️ 顶部智能金刚区 (手机自动3列2行，平板自动6列1行) */
+            header { flex-direction: column !important; padding: 0.75rem !important; gap: 0.75rem !important; border-radius: 1.5rem !important; height: auto !important; }
+            header > div:first-child { width: 100% !important; justify-content: space-between !important; }
+            header h1 { font-size: 1.25rem !important; }
+            header > div:last-child { 
+                width: 100% !important; display: grid !important; 
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)) !important; 
+                gap: 0.5rem !important; margin-top: 0.25rem !important;
             }
-            .sidebar-left > div:first-child { 
-                flex-direction: row !important; 
-                width: 100% !important; 
-                justify-content: space-around !important;
-                gap: 0.5rem !important;
+            header .btn-clash { 
+                margin: 0 !important; padding: 0.6rem 0.2rem !important; font-size: 0.8rem !important; 
+                border-bottom-width: 4px !important; border-radius: 0.75rem !important;
+                display: flex !important; justify-content: center !important; align-items: center !important;
+                white-space: nowrap !important; letter-spacing: -0.5px !important; width: 100% !important;
             }
-            .sidebar-left .btn-select-all, .sidebar-left .w-full.h-\\[2px\\] { display: none !important; }
 
-            .center-content { padding: 0.5rem !important; border-radius: 1.5rem !important; }
-            #paradise-grid { 
-                display: grid !important;
-                grid-template-columns: repeat(2, minmax(0, 1fr)) !important; 
-                gap: 0.5rem !important; 
-            }
-            .student-card { min-height: 180px !important; padding: 0.5rem !important; }
-            .student-card .w-28 { width: 4rem !important; height: 4rem !important; }
-            .rank-toggle-tab, .sidebar-right-container { display: none !important; }
+            /* 3. 左侧控制台：底部横向滑动工具栏 */
+            .sidebar-left { width: 100% !important; flex-direction: row !important; overflow-x: auto !important; padding-bottom: 0.25rem !important; flex-shrink: 0 !important; }
+            .sidebar-left > div:first-child { flex-direction: row !important; width: max-content !important; padding: 0.5rem 1rem !important; gap: 1rem !important; border-radius: 1.5rem !important; margin-bottom: 0 !important; }
+            .sidebar-left .w-full.h-\\[2px\\] { width: 2px !important; height: auto !important; min-height: 20px; }
+            .sidebar-left > button { width: auto !important; padding: 0.5rem 1.5rem !important; margin-top: 0 !important; border-radius: 1.5rem !important; white-space: nowrap; }
+            
+            /* 4. 中间主战场：智能双列网格 */
+            .center-content { padding: 0.75rem !important; border-radius: 1.5rem !important; }
+            #paradise-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 0.5rem !important; }
+            .student-card { min-height: 200px !important; padding: 0.75rem !important; border-radius: 1rem !important; border-width: 2px !important; }
+            .student-card .w-28 { width: 4.5rem !important; height: 4.5rem !important; border-radius: 1rem !important; }
+            .student-card .text-lg { font-size: 0.95rem !important; margin-bottom: 0.25rem !important; }
+            .btn-control { width: 28px !important; height: 28px !important; font-size: 16px !important; border-width: 2px !important; }
+            
+            /* 5. ⭐️ 右侧积分榜：变身悬浮侧滑抽屉 (不挤压主屏幕) */
+            .sidebar-right-container { position: fixed !important; right: 0 !important; top: 0 !important; height: 100vh !important; z-index: 999 !important; width: 100vw !important; background: rgba(0,0,0,0.5) !important; justify-content: flex-end !important; transition: background 0.3s ease !important; margin: 0 !important; }
+            .sidebar-right-container.collapsed { width: 0 !important; background: transparent !important; pointer-events: none !important; }
+            .sidebar-right-container.collapsed .sidebar-right { transform: translateX(100%); }
+            .sidebar-right { width: 85% !important; max-width: 300px !important; border-radius: 1.5rem 0 0 1.5rem !important; border: none !important; height: 100% !important; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1) !important; transform: translateX(0); background: var(--card-bg) !important; }
+            .rank-toggle-tab { left: -38px !important; width: 38px !important; font-size: 0.9rem !important; padding: 12px 0 !important; border-radius: 12px 0 0 12px !important; top: 60% !important; pointer-events: auto !important; box-shadow: -4px 0 10px rgba(0,0,0,0.1) !important; }
+            
+            /* 6. 性能救星：关闭高耗能特效，彻底告别手机点加分的卡顿 */
+            * { touch-action: manipulation; }
+            .animate-float { animation: none !important; transform: translateY(0) !important; }
+            .student-card:hover { transform: none !important; }
+            .firework-p { box-shadow: none !important; }
         }
     </style>
 </head>
@@ -416,7 +433,6 @@
     <header class="flex justify-between items-center bg-white rounded-[2rem] px-8 py-4 border-4 border-indigo-900 border-b-8 z-10">
         <div class="flex items-center gap-6">
             <div class="flex items-center gap-3">
-                <button id="mobile-rank-btn" onclick="toggleRankSidebar()" class="btn-clash bg-purple-500 text-white px-5 py-2.5 rounded-xl border-b-6 border-purple-700 font-black text-base shadow-sm" style="display: none;">🏆 荣耀榜单</button>
                 <span class="text-4xl drop-shadow-sm">🐾</span>
                 <div class="flex flex-col">
                     <h1 id="display-title" class="text-2xl font-black tracking-tight leading-none">班级宠物乐园</h1>
@@ -494,12 +510,9 @@
             <div onclick="toggleRankSidebar()" class="rank-toggle-tab font-heiti">荣耀积分榜</div>
             <aside class="sidebar-right">
                 <div class="p-5 text-white flex flex-col gap-4">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <span class="text-2xl">🏆</span>
-                            <h3 class="font-black text-lg font-heiti text-amber-400 uppercase tracking-wider">荣耀榜单</h3>
-                        </div>
-                        <button onclick="toggleRankSidebar()" class="mobile-close-btn text-white hover:text-rose-400 text-3xl transition-colors" style="display: none;">✕</button>
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">🏆</span>
+                        <h3 class="font-black text-lg font-heiti text-amber-400 uppercase tracking-wider">荣耀榜单</h3>
                     </div>
                     <div class="flex bg-indigo-950/40 p-1 rounded-xl gap-1 border border-indigo-800">
                         <button onclick="setRankLevel('all')" id="rl-all" class="flex-grow py-1.5 text-[10px] font-black bg-amber-400 text-indigo-900 rounded-lg shadow-sm transition-all">全部</button>
@@ -1301,49 +1314,41 @@
 
             const btn = document.querySelector('#auth-activate-area button');
             const originalText = btn.innerText;
-            btn.innerText = "⏳ 连接云端防伪中心校验中..."; btn.disabled = true;
+            btn.innerText = "⏳ 连线专属服务器验证中..."; btn.disabled = true;
 
-            const query = Bmob.Query("ActivationCode");
-            query.equalTo("code", "==", code);
-            query.find().then(res => {
-                if (res.length === 0) {
-                    alert("❌ 激活码无效，请检查是否输入正确！");
-                    btn.innerText = originalText; btn.disabled = false;
-                    return;
-                }
-
-                const codeRecord = res[0];
-                if (codeRecord.isUsed) {
-                    alert("❌ 对不起，该激活码已被其他账号使用！");
-                    btn.innerText = originalText; btn.disabled = false;
-                    return;
-                }
-
-                // 核销激活码（标记为已使用）
-                const updateQuery = Bmob.Query("ActivationCode");
-                updateQuery.set("id", codeRecord.objectId);
-                updateQuery.set("isUsed", true);
-                updateQuery.set("usedBy", Bmob.User.current().username); 
-
-                updateQuery.save().then(() => {
-                    // 激活码核销成功！正式给老师创建云端存分数的抽屉
+            // 🌟 核心魔法：跨海大桥！向我们刚建好的本地服务器发送请求
+            fetch('http://localhost:3000/api/verify-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: code }) // 把网页上填的激活码打包发给后端
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // ✅ 后端点头了：验证通过！
+                    // (保留这里的 Bmob 逻辑，因为验证通过后，还要给用户建一个存分数的空抽屉)
                     const saveQuery = Bmob.Query("CloudSaveData");
                     saveQuery.set("username", Bmob.User.current().username);
                     saveQuery.set("appData", JSON.stringify(DEFAULT_STATE)); 
                     saveQuery.save().then(saveRes => {
-                        alert("🎉 激活成功！专属云端数据已生成，欢迎来到班级宠物乐园！"); 
+                        alert("🎉 " + data.message); // 弹出后端传回来的成功提示
                         checkAuthState(); 
                     }).catch(err => { 
-                        alert("创建云端存档失败，请检查网络！"); 
+                        alert("创建云端存档失败！"); 
                         btn.innerText = originalText; btn.disabled = false; 
                     });
-                }).catch(err => {
-                    alert("核销激活码时发生网络故障，请重试！");
+                } else {
+                    // ❌ 后端摇头了：假码或已被使用
+                    alert("❌ " + data.message); // 弹出后端传回来的失败原因
                     btn.innerText = originalText; btn.disabled = false;
-                });
-            }).catch(err => {
-                alert("无法连接到验证服务器，请检查网络！");
-                btn.innerText = originalText; btn.disabled = false;
+                }
+            })
+            .catch(err => { 
+                console.error("连线失败:", err);
+                alert("连接专属服务器失败！请检查大管家（黑窗口）是否正在运行？"); 
+                btn.innerText = originalText; btn.disabled = false; 
             });
         }
 
