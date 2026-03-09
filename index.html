@@ -562,13 +562,6 @@
                     </div>
                 </section>
                 <section>
-                    <h3 class="text-base font-black mb-3 flex items-center gap-2">😊 开心转化</h3>
-                    <div class="bg-indigo-50 p-4 rounded-xl border-2 border-indigo-100 flex items-center justify-between">
-                        <span class="text-xs font-black text-indigo-700 font-heiti">每获得多少积分增加 1 开心值</span>
-                        <input id="rules-happiness-ratio" type="number" onchange="updateHappinessRatio(this.value)" class="w-16 p-2 rounded-lg border-2 border-white text-center font-black outline-none text-indigo-900">
-                    </div>
-                </section>
-                <section>
                     <div class="flex justify-between items-center mb-3"><h3 class="text-base font-black text-emerald-600 font-heiti">✨ 奖励榜样</h3><button onclick="addRuleItem('reward')" class="text-[10px] bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-black">+ 新增</button></div>
                     <div id="reward-rules-container" class="space-y-2"></div>
                 </section>
@@ -1120,7 +1113,7 @@
             const snapshot = JSON.parse(JSON.stringify(state));
             delete snapshot.history;
             state.history.push({ snapshot, desc });
-            if (state.history.length > 50) state.history.shift();
+            if (state.history.length > 10) state.history.shift(); 
             saveStateToLocal();
         }
 
@@ -1976,7 +1969,40 @@
         function addNewShopProduct() { const name = document.getElementById('shop-new-name').value.trim(), pts = parseInt(document.getElementById('shop-new-points').value), icon = document.getElementById('shop-new-icon').value, growth = parseInt(document.getElementById('shop-new-growth').value) || 0; if(name && !isNaN(pts)) { pushHistory('商城'); if (editingShopProductId) { const p = state.shopProducts.find(item => item.id === editingShopProductId); if (p) { p.name = name; p.points = pts; p.icon = icon; p.growth = growth; } editingShopProductId = null; const btn = document.querySelector('[onclick="addNewShopProduct()"]'); if (btn) btn.innerText = "进货"; } else { state.shopProducts.push({ id: Date.now(), name, points: pts, icon, growth, type: 'self' }); } saveStateToLocal(); renderShopUI(); document.getElementById('shop-new-name').value = ''; document.getElementById('shop-new-points').value = ''; document.getElementById('shop-new-growth').value = '0'; } }
         function redeemProduct(id) { const stud = getCurrentClass().students.find(s => s.id === state.selectedShopStudentId), prod = state.shopProducts.find(p => p.id === id); if(stud && prod && (stud.happiness || 0) >= prod.points) { pushHistory('兑换'); stud.happiness -= prod.points; if (prod.growth > 0) updatePoints(stud.id, prod.growth, false); saveStateToLocal(); renderAll(); renderShopUI(); } }
         function exportData() { const blob = new Blob([JSON.stringify(state, null, 2)], {type : 'application/json'}), url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = `backup.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); }
-        function importData(input) { const file = input.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = (e) => { try { pushHistory('导案'); state = JSON.parse(e.target.result); saveStateToLocal(); renderAll(); renderAdminPanels(); initStageInputs(); alert("导入成功！"); } catch (err) { alert("失败"); } }; reader.readAsText(file); }
+        function importData(input) { 
+            const file = input.files[0]; 
+            if(!file) return; 
+            const reader = new FileReader(); 
+            reader.onload = (e) => { 
+                try { 
+                    // 1. 先尝试解析文件（如果这里报错，才是真正的格式错误）
+                    const importedState = JSON.parse(e.target.result); 
+                    
+                    // 2. 解析成功后再赋值，防止破坏当前数据
+                    state = importedState; 
+                    
+                    // 3. 🛡️ 兼容性保护：判断队列是否存在，防止没加变量导致的误报崩溃
+                    if (typeof pendingSaveClassIds !== 'undefined' && state.classes) {
+                        state.classes.forEach(c => pendingSaveClassIds.add(c.id));
+                    }
+                    
+                    pushHistory('导入存档'); 
+                    saveStateToLocal(); 
+                    renderAll(); 
+                    renderAdminPanels(); 
+                    initStageInputs(); 
+                    alert("✅ 导入成功！数据已成功加载并同步。"); 
+                } catch (err) { 
+                    // 🚨 智能诊断：把真正的报错原因打印出来，而不是盲目报格式错误
+                    console.error("导入崩溃的真实原因:", err);
+                    alert("❌ 导入失败！\n\n如果这是你刚导出的文件，那不是格式问题，请按键盘 F12 打开控制台看红色的报错信息。"); 
+                } finally {
+                    // 核心细节：无论成功失败，都清空文件选择框，否则你连着导入同一个文件会没反应
+                    input.value = '';
+                }
+            }; 
+            reader.readAsText(file); 
+        }
         function clearAllData() { if(confirm("确定清空？")) { pushHistory('清空'); state = JSON.parse(JSON.stringify(DEFAULT_STATE)); saveStateToLocal(); renderAll(); renderAdminPanels(); initStageInputs(); } }
 
         function editClass(id) {
