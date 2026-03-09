@@ -1,0 +1,2088 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>班级宠物乐园 </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/hydrogen-js-sdk/dist/Bmob-2.5.0.min.js"></script>
+    <style>
+        /* 主题变量定义 */
+        :root {
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --primary-text: #1e3a8a;
+            --border-color: #1e3a8a;
+            --accent-color: #fbbf24;
+            --progress-fill: linear-gradient(90deg, #f43f5e, #fb7185);
+            --btn-glow: none;
+        }
+
+       /* 🚀 梦幻星空 (Light Space) */
+        [data-theme='space'] {
+            --bg-color: #f5f3ff;
+            --card-bg: #ffffff;
+            --primary-text: #4c1d95;
+            --border-color: #9333ea;
+            --accent-color: #d8b4fe;
+            --progress-fill: linear-gradient(90deg, #c084fc, #818cf8);
+            --btn-glow: none;
+        }
+        /* 🍭 糖果多巴胺 (Candy Pop) */
+        [data-theme='candy'] {
+            --bg-color: #CCFBF1;
+            --card-bg: #ffffff;
+            --primary-text: #db2777;
+            --border-color: #f472b6;
+            --accent-color: #facc15;
+            --progress-fill: #f472b6;
+            --btn-glow: none;
+        }
+
+        /* 🌿 森林奇遇记 (Wild Nature) */
+        [data-theme='nature'] {
+            --bg-color: #ecfdf5;
+            --card-bg: #ffffff;
+            --primary-text: #065f46;
+            --border-color: #10b981;
+            --accent-color: #f59e0b;
+            --progress-fill: linear-gradient(90deg, #34d399, #059669);
+            --btn-glow: none;
+        }
+
+        /* 👾 像素大冒险 (Retro Pixel) */
+        [data-theme='pixel'] {
+            --bg-color: #000000;
+            --card-bg: #111827;
+            --primary-text: #ffffff;
+            --border-color: #d946ef;
+            --accent-color: #06b6d4;
+            --progress-fill: #06b6d4;
+            --btn-glow: none;
+        }
+/* ⚡️ 赛博霓虹 (Cyber Neon) */
+        [data-theme='cyber'] {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --primary-text: #f8fafc;
+            --border-color: #ec4899;
+            --accent-color: #06b6d4;
+            --progress-fill: linear-gradient(90deg, #ec4899, #eab308);
+            --btn-glow: none;
+        }
+
+        /* 🌅 迈阿密落日 (Miami Sunset) */
+        [data-theme='sunset'] {
+            --bg-color: #fff7ed;
+            --card-bg: #ffffff;
+            --primary-text: #7c2d12;
+            --border-color: #ea580c;
+            --accent-color: #db2777;
+            --progress-fill: linear-gradient(90deg, #f97316, #db2777);
+            --btn-glow: none;
+        }
+
+        /* 🌊 深海珊瑚 (Deep Ocean) */
+        [data-theme='ocean'] {
+            --bg-color: #f0f9ff;
+            --card-bg: #ffffff;
+            --primary-text: #082f49;
+            --border-color: #0284c7;
+            --accent-color: #f43f5e;
+            --progress-fill: linear-gradient(90deg, #38bdf8, #818cf8);
+            --btn-glow: none;
+        }
+
+        /* 🍋 夏日青柠 (Summer Lemon) */
+        [data-theme='lemon'] {
+            --bg-color: #fefce8;
+            --card-bg: #ffffff;
+            --primary-text: #172554;
+            --border-color: #3b82f6;
+            --accent-color: #eab308;
+            --progress-fill: linear-gradient(90deg, #eab308, #f97316);
+            --btn-glow: none;
+        }
+        
+        /* ================= 🌓 智能暗黑模式全局修复补丁 ================= */
+        /* 1. 提亮原本极深的文字，让它们在暗背景下闪闪发光 */
+        [data-theme='cyber'] .text-indigo-950, [data-theme='pixel'] .text-indigo-950,
+        [data-theme='cyber'] .text-indigo-900, [data-theme='pixel'] .text-indigo-900,
+        [data-theme='cyber'] .text-slate-800, [data-theme='pixel'] .text-slate-800,
+        [data-theme='cyber'] .text-slate-700, [data-theme='pixel'] .text-slate-700,
+        [data-theme='cyber'] .text-slate-600, [data-theme='pixel'] .text-slate-600,
+        [data-theme='cyber'] .text-slate-500, [data-theme='pixel'] .text-slate-500,
+        [data-theme='cyber'] .text-slate-400, [data-theme='pixel'] .text-slate-400 {
+            color: #cbd5e1 !important; 
+        }
+        
+        /* 2. 将写死的浅底色块，变成极具科幻感的“半透明磨砂玻璃” */
+        [data-theme='cyber'] .bg-slate-50, [data-theme='pixel'] .bg-slate-50,
+        [data-theme='cyber'] .bg-slate-100, [data-theme='pixel'] .bg-slate-100,
+        [data-theme='cyber'] .bg-indigo-50, [data-theme='pixel'] .bg-indigo-50,
+        [data-theme='cyber'] .bg-indigo-100, [data-theme='pixel'] .bg-indigo-100,
+        [data-theme='cyber'] .bg-amber-50, [data-theme='pixel'] .bg-amber-50,
+        [data-theme='cyber'] .bg-emerald-50, [data-theme='pixel'] .bg-emerald-50,
+        [data-theme='cyber'] .bg-rose-50, [data-theme='pixel'] .bg-rose-50,
+        [data-theme='cyber'] .bg-blue-50, [data-theme='pixel'] .bg-blue-50 {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        /* 3. 让所有输入框彻底融入暗黑环境 */
+        [data-theme='cyber'] input, [data-theme='pixel'] input,
+        [data-theme='cyber'] select, [data-theme='pixel'] select,
+        [data-theme='cyber'] textarea, [data-theme='pixel'] textarea {
+            background-color: rgba(0, 0, 0, 0.4) !important;
+            color: #f8fafc !important;
+            border-color: var(--border-color) !important;
+        }
+
+        body { 
+            /* 这里换成了最标准的系统黑体：苹果电脑自动用萍方黑体，Windows自动用微软雅黑 */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--primary-text);
+            height: 100vh; 
+            overflow: hidden; 
+            font-size: 18px; 
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* 应用主题变量到特定结构，并使用 !important 覆盖 Tailwind */
+        header, main, aside > div, .student-card, .sidebar-right, 
+        .modal-enter > div:last-child {
+            background-color: var(--card-bg) !important;
+            border-color: var(--border-color) !important;
+            color: var(--primary-text);
+        }
+
+        h1, h2, h3, h4, .text-indigo-900, .text-indigo-700, .text-slate-800, .text-emerald-800 {
+            color: var(--primary-text) !important;
+        }
+
+        .pixel-bg { background-image: radial-gradient(rgba(0,0,0,0.1) 2px, transparent 2px); background-size: 30px 30px; }
+        
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        
+        .eye-blink { animation: blink 4s infinite; }
+        @keyframes blink { 0%, 90%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
+        
+        .modal-enter { transform: scale(0.9); opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .modal-show { transform: scale(1); opacity: 1; pointer-events: auto; }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 10px; border: 2px solid var(--border-color); }
+        
+        .card-shadow { box-shadow: 6px 6px 0px var(--border-color); }
+        .sidebar-left { width: 150px; flex-shrink: 0; }
+        
+        /* 抽拉式积分榜容器 */
+        .sidebar-right-container { 
+            position: relative;
+            display: flex;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            width: 240px; 
+            flex-shrink: 0;
+            z-index: 40;
+        }
+        .sidebar-right-container.collapsed {
+            width: 0;
+            margin-right: -1rem;
+        }
+        .sidebar-right { 
+            width: 100%; 
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border-radius: 2.5rem;
+            border: 6px solid var(--border-color);
+            box-shadow: -8px 8px 0px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.3s;
+        }
+        .collapsed .sidebar-right {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* 积分榜标签 */
+        .rank-toggle-tab {
+            position: absolute;
+            left: -52px; 
+            top: 50%;
+            transform: translateY(-50%);
+            width: 52px;
+            padding: 20px 0;
+            background: var(--accent-color) !important;
+            color: var(--border-color) !important;
+            border-radius: 20px 0 0 20px;
+            cursor: pointer;
+            writing-mode: vertical-rl;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            border: 4px solid var(--border-color);
+            border-right: none;
+            box-shadow: -4px 4px 0px rgba(0,0,0,0.1);
+            z-index: 50;
+            line-height: 1.2;
+            text-align: center;
+        }
+        .rank-toggle-tab:hover {
+            filter: brightness(1.1);
+        }
+
+        .center-content { flex-grow: 1; overflow-y: auto; transition: all 0.5s ease; }
+
+        .progress-bar-container { height: 10px; background: rgba(0,0,0,0.05); border-radius: 5px; overflow: hidden; border: 2px solid var(--border-color); }
+        .progress-bar-fill { height: 100%; background: var(--progress-fill) !important; transition: width 0.3s ease; }
+        
+        .btn-control {
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 10px; border: 3px solid var(--border-color) !important;
+            color: var(--border-color) !important; font-size: 20px; transition: all 0.2s;
+            font-weight: bold; background: white;
+            box-shadow: 2px 2px 0px var(--border-color);
+        }
+        .btn-control:hover { background: var(--accent-color); transform: translate(-1px, -1px); box-shadow: 3px 3px 0px var(--border-color); }
+        .btn-control:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0px var(--border-color); }
+        
+        .tab-active-blue { border-bottom: 6px solid var(--accent-color) !important; color: var(--primary-text) !important; font-weight: 900; }
+        .tab-active-orange { border-bottom: 6px solid #3b82f6 !important; color: var(--primary-text) !important; font-weight: 900; }
+        
+        #batch-action-bar { 
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            margin: 0 !important;
+            padding: 0 !important;
+            border-width: 0 !important;
+            transition: all 0.4s ease;
+            /* 🚀 新增：开启吸顶魔法 */
+            position: sticky;
+            top: 0px;
+            z-index: 45;
+        }
+        #batch-action-bar.active { 
+            max-height: 120px;
+            opacity: 1;
+            margin-bottom: 1rem !important;
+            padding: 1rem 1.5rem !important; 
+            border-width: 4px !important;
+            /* 🚀 新增：滑下去的时候有一层很高级的悬浮阴影 */
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        .checkbox-custom { width: 24px; height: 24px; border: 3px solid var(--border-color) !important; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 10; background: white; }
+        .checkbox-custom.checked { background: var(--accent-color) !important; }
+        .checkbox-custom.checked::after { content: '✓'; color: var(--border-color) !important; font-size: 16px; font-weight: bold; }
+
+        .font-heiti { font-family: "Microsoft YaHei", "Heiti SC", sans-serif; }
+        
+        /* 按钮悬停动效与主题适配 */
+        .btn-clash { 
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            box-shadow: var(--btn-glow);
+        }
+        .btn-clash:hover { transform: translateY(-3px); box-shadow: 0 6px 0px rgba(0,0,0,0.2), var(--btn-glow); }
+        .btn-clash:active { transform: translateY(2px); box-shadow: 0 2px 0px rgba(0,0,0,0.1); }
+        
+        [data-theme='pixel'] .btn-clash, [data-theme='pixel'] .student-card {
+            border-width: 6px !important;
+        }
+
+        /* 选中态样式 */
+        .pet-option-selected {
+            border-color: #fbbf24 !important;
+            background-color: #fef3c7 !important;
+            transform: scale(1.05);
+        }
+
+        /* 修改：更震撼的烟花及爱心动效 */
+        @keyframes firework-blossom {
+            0% { transform: translate(0, 0) scale(0); opacity: 1; }
+            50% { opacity: 1; transform: translate(calc(var(--tw-x) * 0.6), calc(var(--tw-y) * 0.6)) scale(2); }
+            100% { transform: translate(var(--tw-x), var(--tw-y)) scale(0); opacity: 0; }
+        }
+        .firework-p {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            animation: firework-blossom 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes heart-float {
+            0% { transform: translate(0, 0) scale(0.5) rotate(0); opacity: 0; }
+            20% { opacity: 1; transform: translate(15px, -30px) scale(1.8) rotate(15deg); }
+            100% { transform: translate(40px, -150px) scale(1.2) rotate(-15deg); opacity: 0; }
+        }
+        .heart-float-el {
+            position: absolute;
+            top: 10%;
+            right: 15%;
+            font-size: 40px;
+            pointer-events: none;
+            z-index: 50;
+            animation: heart-float 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            text-shadow: 0 0 10px rgba(251, 113, 133, 0.8);
+        }
+
+        /* 毕业按钮动画 */
+        .btn-graduate {
+            animation: pulse-border 1.5s infinite;
+        }
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(251, 191, 36, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
+        }
+
+        /* 满级金光背景 */
+        .gold-glow {
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.5), inset 0 0 10px rgba(251, 191, 36, 0.3);
+            border-color: #fbbf24 !important;
+        }
+    </style>
+</head>
+<body class="pixel-bg flex flex-col p-4 gap-4 h-screen">
+<div id="auth-gate-container" class="fixed inset-0 z-[9999] bg-indigo-900 flex items-center justify-center transition-opacity duration-500">
+        <div class="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-md p-10 border-4 border-indigo-300 text-center relative overflow-hidden">
+            <div class="text-6xl mb-4 animate-float">☁️</div>
+            <h2 class="text-2xl font-black text-indigo-900 font-heiti mb-2" id="auth-title">班级宠物乐园</h2>
+            <p class="text-sm text-slate-500 font-bold mb-6" id="auth-desc">云端数据同步，随时随地开启</p>
+
+            <div id="auth-login-reg-area" class="space-y-4">
+                <div class="flex bg-indigo-50 p-1.5 rounded-xl border-2 border-indigo-100 mb-4">
+                    <button id="mode-login-btn" onclick="toggleLoginMode(true)" class="flex-grow py-3 text-sm font-black bg-indigo-600 text-white rounded-lg shadow-sm transition-all">登 录</button>
+                    <button id="mode-reg-btn" onclick="toggleLoginMode(false)" class="flex-grow py-3 text-sm font-black text-indigo-400 hover:bg-white rounded-lg transition-all">注 册</button>
+                </div>
+                <input type="text" id="auth-username" placeholder="请输入账号 (如: teacher01)" class="w-full p-4 rounded-xl border-2 border-slate-200 outline-none focus:border-indigo-500 font-black text-indigo-900">
+                <input type="password" id="auth-password" placeholder="请输入密码 (至少6位)" class="w-full p-4 rounded-xl border-2 border-slate-200 outline-none focus:border-indigo-500 font-black text-indigo-900">
+                <button id="auth-submit-btn" onclick="handleLogin()" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-black text-lg shadow-md hover:bg-indigo-700 transition-all border-b-4 border-indigo-800 active:translate-y-1">登 录 账 号</button>
+            </div>
+
+            <div id="auth-activate-area" class="space-y-4 hidden">
+                <div class="bg-emerald-50 p-3 rounded-xl border-2 border-emerald-100 mb-2 text-xs font-black text-emerald-600">
+                    账号 <span id="display-username" class="text-emerald-900 text-base font-black"></span> 登录成功！
+                </div>
+                <p class="text-xs text-slate-400 font-bold mb-4">首次使用需要绑定您的正版激活码</p>
+                <input type="text" id="auth-code" placeholder="输入唯一激活码" class="w-full p-4 rounded-xl border-2 border-amber-200 outline-none focus:border-amber-500 font-black text-amber-700 text-center uppercase tracking-widest">
+                <button onclick="handleActivate()" class="w-full bg-amber-400 text-indigo-900 py-4 rounded-xl font-black text-lg shadow-md hover:bg-amber-500 transition-all border-b-4 border-amber-600 active:translate-y-1">绑定激活并开启系统 🚀</button>
+                <button onclick="logoutAuth()" class="text-xs text-slate-400 mt-4 hover:text-rose-500 font-bold underline">退出当前账号</button>
+            </div>
+        </div>
+    </div>
+
+    <header class="flex justify-between items-center bg-white rounded-[2rem] px-8 py-4 border-4 border-indigo-900 border-b-8 z-10">
+        <div class="flex items-center gap-6">
+            <div class="flex items-center gap-3">
+                <span class="text-4xl drop-shadow-sm">🐾</span>
+                <div class="flex flex-col">
+                    <h1 id="display-title" class="text-2xl font-black tracking-tight leading-none">班级宠物乐园</h1>
+                    <p id="display-calendar-info" class="text-[10px] font-black text-indigo-400 mt-1.5 opacity-80 tracking-wide"></p>
+                </div>
+            </div>
+            <button onclick="toggleModal('class-switcher-modal', true)" class="text-xs font-black text-indigo-600 bg-indigo-50 px-4 py-2 rounded-xl flex items-center gap-2 border-2 border-indigo-200 hover:bg-yellow-100 hover:border-yellow-400 transition-all">
+                切换班级 <span class="text-[10px]">▼</span>
+            </button>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <button onclick="toggleModal('shop-modal', true)" class="btn-clash bg-amber-400 text-indigo-950 px-5 py-2.5 rounded-xl border-b-6 border-amber-600 font-black text-base shadow-sm">🛍️ 积分商城</button>
+            <button onclick="toggleModal('rules-modal', true)" class="btn-clash bg-emerald-400 text-indigo-950 px-5 py-2.5 rounded-xl border-b-6 border-emerald-600 font-black text-base shadow-sm">📜 规则设置</button>
+            <button onclick="toggleModal('admin-modal', true)" class="btn-clash bg-blue-500 text-white px-5 py-2.5 rounded-xl border-b-6 border-blue-700 font-black text-base shadow-sm">🛠️ 班级管理</button>
+            <button onclick="toggleModal('system-modal', true)" class="btn-clash bg-slate-600 text-white px-5 py-2.5 rounded-xl border-b-6 border-slate-800 font-black text-base shadow-sm">⚙️ 系统设置</button>
+            <button onclick="toggleModal('guide-modal', true)" class="btn-clash bg-rose-400 text-white px-5 py-2.5 rounded-xl border-b-6 border-rose-600 font-black text-base shadow-sm">📖 使用指南</button>
+            <button onclick="logoutAuth()" class="btn-clash bg-slate-200 text-slate-500 px-4 py-2.5 rounded-xl border-b-6 border-slate-300 font-black text-sm shadow-sm ml-2" title="注销当前设备授权">🔒 注销</button>
+        </div>
+    </header>
+
+    <div class="flex flex-grow gap-4 overflow-hidden relative">
+        <aside class="sidebar-left flex flex-col gap-4">
+            <div class="bg-white rounded-[2rem] p-5 border-4 border-indigo-900 border-b-8 flex flex-col items-center gap-5">
+                <div class="flex flex-col items-center gap-2 w-full text-center">
+                    <span class="text-[10px] text-slate-400 uppercase font-black font-heiti tracking-widest">模式切换</span>
+                    <button id="toggle-select-mode" onclick="toggleSelectionMode()" class="w-full py-2.5 bg-slate-100 text-slate-600 rounded-xl text-xs font-black border-2 border-slate-200 transition-all">多选模式: 关</button>
+                    <button id="btn-select-all" onclick="toggleSelectAll()" class="hidden w-full py-2 bg-yellow-50 text-amber-700 rounded-lg text-[10px] font-black border-2 border-yellow-200">全选本班</button>
+                </div>
+                <div class="w-full h-[2px] bg-slate-100"></div>
+                <div class="bg-indigo-50 rounded-[1.5rem] p-2 w-full border-2 border-indigo-100 flex flex-col gap-2">
+                    <span class="text-[10px] text-indigo-300 text-center uppercase font-black font-heiti">视图选择</span>
+                    <button onclick="setViewMode('individual')" id="view-ind" class="w-full py-2.5 rounded-xl text-xs font-black bg-indigo-600 text-white shadow-md transition-all">个人卡片</button>
+                    <button onclick="setViewMode('group')" id="view-grp" class="w-full py-2.5 rounded-xl text-xs font-black text-indigo-400 hover:bg-white transition-all">小组合作</button>
+                </div>
+                <div class="w-full h-[2px] bg-slate-100"></div>
+                <button onclick="toggleModal('adoption-modal', true)" class="flex flex-col items-center gap-1 group">
+                    <div class="w-14 h-14 bg-amber-400 rounded-[1.2rem] flex items-center justify-center text-3xl group-hover:scale-110 group-hover:rotate-6 transition-all border-4 border-indigo-900 shadow-sm">🥚</div>
+                    <span class="text-[11px] font-black font-heiti">宠物百科</span>
+                </button>
+            </div>
+            <button onclick="undoAction()" class="mt-auto bg-slate-100 text-slate-500 w-full py-4 rounded-[1.5rem] border-b-6 border-slate-300 font-black text-xs hover:bg-white transition-all">↩ 撤销</button>
+        </aside>
+
+        <main class="center-content bg-white rounded-[2.5rem] p-6 flex flex-col custom-scrollbar border-4 border-indigo-900 shadow-inner relative">
+            <div class="flex justify-between items-center bg-indigo-900 p-5 rounded-[1.5rem] mb-6 shadow-lg">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-amber-400 rounded-[1rem] flex items-center justify-center text-2xl border-2 border-white shadow-sm">🚀</div>
+                    <div class="text-xl font-black font-heiti" style="color: #ffffff !important;">个人成长乐园</div>
+                </div>
+                <div class="flex flex-col items-end">
+                    <span class="text-[10px] text-indigo-300 font-black uppercase font-heiti">全班总积分</span>
+                    <span class="text-amber-400 text-2xl font-black font-heiti leading-none">💎 <span id="total-class-points">0</span></span>
+                </div>
+            </div>
+
+            <div id="batch-action-bar" class="batch-bar bg-amber-300 shadow-md rounded-2xl border-4 border-indigo-900 flex items-center justify-between p-4 px-6 mb-4">
+                <div class="text-base font-black text-indigo-950 font-heiti whitespace-nowrap mr-2">已选定 <span id="selected-count" class="text-rose-600 text-2xl">0</span> 位</div>
+                <div class="flex gap-2 flex-wrap justify-end">
+                    <button onclick="openBatchEditModal()" class="bg-white text-indigo-900 px-3 py-2 rounded-xl font-black text-xs border-2 border-indigo-900 shadow-sm hover:bg-indigo-50">✏️ 编辑</button>
+                    <button onclick="openBatchRuleModal('reward')" class="bg-emerald-500 text-white px-3 py-2 rounded-xl font-black text-xs border-b-4 border-emerald-700 shadow-sm">✨ 奖励</button>
+                    <button onclick="openBatchRuleModal('punish')" class="bg-rose-500 text-white px-3 py-2 rounded-xl font-black text-xs border-b-4 border-rose-700 shadow-sm">🔥 扣分</button>
+                    <button onclick="batchRandomAssignPets()" class="bg-indigo-600 text-white px-3 py-2 rounded-xl font-black text-xs border-b-4 border-indigo-800 shadow-sm">🎲 随机孵化</button>
+                </div>
+            </div>
+
+            <div id="paradise-grid" class="flex-grow"></div>
+            <div id="empty-state" class="hidden flex flex-col items-center justify-center py-20 text-slate-300">
+                <span class="text-7xl mb-6 animate-float">🛸</span>
+                <p class="text-lg font-black font-heiti text-indigo-900/30">乐园里空荡荡的，快去邀请成员吧！</p>
+            </div>
+        </main>
+
+        <div id="sidebar-container" class="sidebar-right-container">
+            <div onclick="toggleRankSidebar()" class="rank-toggle-tab font-heiti">荣耀积分榜</div>
+            <aside class="sidebar-right">
+                <div class="p-5 text-white flex flex-col gap-4">
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl">🏆</span>
+                        <h3 class="font-black text-lg font-heiti text-amber-400 uppercase tracking-wider">荣耀榜单</h3>
+                    </div>
+                    <div class="flex bg-indigo-950/40 p-1 rounded-xl gap-1 border border-indigo-800">
+                        <button onclick="setRankLevel('all')" id="rl-all" class="flex-grow py-1.5 text-[10px] font-black bg-amber-400 text-indigo-900 rounded-lg shadow-sm transition-all">全部</button>
+                        <button onclick="setRankLevel('month')" id="rl-month" class="flex-grow py-1.5 text-[10px] font-black text-indigo-300 hover:text-white transition-all">月榜</button>
+                        <button onclick="setRankLevel('week')" id="rl-week" class="flex-grow py-1.5 text-[10px] font-black text-indigo-300 hover:text-white transition-all">周榜</button>
+                        <button onclick="setRankLevel('day')" id="rl-day" class="flex-grow py-1.5 text-[10px] font-black text-indigo-300 hover:text-white transition-all">日榜</button>
+                    </div>
+                    <div class="flex gap-1.5">
+                        <button id="rank-type-ind" onclick="setRankType('individual')" class="flex-grow py-2 text-[11px] font-black bg-indigo-500 text-white rounded-lg border-b-4 border-indigo-700">个人</button>
+                        <button id="rank-type-grp" onclick="setRankType('group')" class="flex-grow py-2 text-[11px] font-black bg-indigo-900 text-indigo-300 rounded-lg hover:bg-indigo-800 transition-all">小组</button>
+                    </div>
+                    <div id="current-rank-date-label" class="text-[10px] font-black text-indigo-300 text-center opacity-60"></div>
+                </div>
+                <div class="flex-grow bg-white rounded-t-[2rem] p-3 flex flex-col gap-1 overflow-y-auto custom-scrollbar shadow-inner" id="ranking-list"></div>
+            </aside>
+        </div>
+    </div>
+
+    <div id="adoption-modal" class="fixed inset-0 z-50 modal-enter flex items-center justify-center p-4">
+        <div onclick="toggleModal('adoption-modal', false)" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-4xl h-[75vh] overflow-hidden flex flex-col border-4 border-indigo-900">
+            <div class="p-6 border-b-4 border-indigo-900 flex justify-between items-center bg-indigo-900 text-white shrink-0">
+                <h2 class="text-2xl font-black font-heiti">📖 生物图鉴</h2>
+                <button onclick="toggleModal('adoption-modal', false)" class="text-white hover:text-amber-400 text-3xl transition-colors">✕</button>
+            </div>
+            <div class="flex-grow flex overflow-hidden">
+                <div class="w-1/2 p-6 border-r-4 border-slate-100 overflow-y-auto grid grid-cols-2 gap-4 custom-scrollbar bg-slate-50" id="adoption-list"></div>
+                <div class="w-1/2 p-8 flex flex-col items-center justify-center bg-white" id="adoption-detail">
+                    <div class="flex flex-col items-center text-center">
+                        <span class="text-7xl mb-6">🔭</span>
+                        <p class="text-xl font-black text-indigo-300 font-heiti">点击左侧图鉴<br>查看生物详情</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="shop-modal" class="fixed inset-0 z-50 modal-enter flex items-center justify-center p-4">
+        <div onclick="toggleModal('shop-modal', false)" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col h-[80vh] border-4 border-indigo-900">
+            <div class="p-6 bg-amber-400 flex justify-between items-center border-b-4 border-indigo-900 shrink-0">
+                <h2 class="text-2xl font-black text-indigo-900 flex items-center gap-2">🛍️ 兑换商店</h2>
+                <button onclick="toggleModal('shop-modal', false)" class="text-indigo-900 hover:text-rose-600 text-3xl transition-colors">✕</button>
+            </div>
+            <div class="p-6 border-b-2 border-slate-100 flex justify-between items-center bg-slate-50 shrink-0">
+                <div class="flex items-center gap-3">
+                    <span class="text-xs font-black font-heiti">选择学生:</span>
+                    <select id="shop-student-select" onchange="state.selectedShopStudentId = parseInt(this.value); renderShopUI();" class="p-2 px-4 rounded-xl border-2 border-indigo-200 text-sm font-black text-indigo-900 bg-white outline-none"></select>
+                </div>
+                <div class="bg-indigo-900 px-4 py-2 rounded-xl border-2 border-amber-400 shadow-sm flex items-center gap-2">
+                    <span id="shop-student-points" class="text-amber-400 text-xl font-black font-heiti">😊 0</span>
+                </div>
+            </div>
+            <div class="flex bg-white border-b-2 border-slate-100 shrink-0">
+                <button onclick="switchShopTab('self')" id="stab-self" class="flex-grow py-4 text-base font-black tab-active-orange transition-all">精品礼物</button>
+            </div>
+            <div class="flex-grow overflow-y-auto p-6 custom-scrollbar bg-white">
+                <div id="shop-product-grid" class="grid grid-cols-2 gap-4"></div>
+            </div>
+            <div class="p-6 bg-slate-50 border-t-2 border-slate-100 shrink-0">
+                <div class="flex gap-2 items-center flex-wrap">
+                    <input id="shop-new-name" type="text" placeholder="商品名称" class="flex-grow p-3 rounded-xl border-2 border-slate-200 outline-none text-sm font-bold min-w-[120px]">
+                    <input id="shop-new-points" type="number" placeholder="消耗开心值" class="w-20 p-3 rounded-xl border-2 border-slate-200 outline-none text-sm font-black text-center">
+                    <input id="shop-new-growth" type="number" placeholder="成长值" title="购买此物品增加多少成长点数" class="w-20 p-3 rounded-xl border-2 border-emerald-200 outline-none text-sm font-black text-center text-emerald-600" value="0">
+                    <select id="shop-new-icon" class="p-3 rounded-xl border-2 border-slate-200 text-2xl bg-white outline-none">
+                        <option>🎁</option><option>🍭</option><option>🎫</option><option>🍪</option><option>🚀</option><option>⭐</option><option>🍗</option><option>💖</option><option>🎮</option><option>🧸</option><option>🕶</option><option>🎀</option>
+                    </select>
+                    <button onclick="addNewShopProduct()" class="bg-indigo-700 text-white px-6 py-3 rounded-xl font-black text-sm shadow-md hover:bg-indigo-800 transition-all">进货</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="rules-modal" class="fixed inset-0 z-50 modal-enter flex items-center justify-center p-4">
+        <div onclick="toggleModal('rules-modal', false)" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg border-4 border-indigo-900 overflow-hidden flex flex-col h-[75vh]">
+            <div class="p-6 border-b-4 border-indigo-900 flex justify-between items-center bg-emerald-400 text-indigo-900 shrink-0">
+                <h2 class="text-2xl font-black flex items-center gap-2 font-heiti">📜 成长契约</h2>
+                <button onclick="toggleModal('rules-modal', false)" class="text-indigo-900 hover:text-rose-600 text-3xl transition-colors">✕</button>
+            </div>
+            <div class="p-6 space-y-6 overflow-y-auto custom-scrollbar flex-grow">
+                <section>
+                    <h3 class="text-base font-black mb-3 flex items-center gap-2">🌱 进化本阶需求分</h3>
+                    <div class="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border-2 border-slate-100">
+                        <div class="flex flex-col gap-1"><label class="text-[10px] text-slate-400 font-black font-heiti">🌱 幼年</label><input id="stage-infant" type="number" class="p-2 rounded-lg border-2 border-white text-center font-black outline-none" title="升到下一阶段需要额外多少分"></div>
+                        <div class="flex flex-col gap-1"><label class="text-[10px] text-slate-400 font-black font-heiti">🌿 少年</label><input id="stage-teen" type="number" class="p-2 rounded-lg border-2 border-white text-center font-black outline-none" title="升到下一阶段需要额外多少分"></div>
+                        <div class="flex flex-col gap-1"><label class="text-[10px] text-slate-400 font-black font-heiti">🌳 青年</label><input id="stage-adult" type="number" class="p-2 rounded-lg border-2 border-white text-center font-black outline-none" title="升到下一阶段需要额外多少分"></div>
+                        <div class="flex flex-col gap-1"><label class="text-[10px] text-slate-400 font-black font-heiti">🏆 成熟</label><input id="stage-elder" type="number" class="p-2 rounded-lg border-2 border-white text-center font-black outline-none" title="满级需要额外多少分"></div>
+                    </div>
+                </section>
+                <section>
+                    <h3 class="text-base font-black mb-3 flex items-center gap-2">😊 开心转化</h3>
+                    <div class="bg-indigo-50 p-4 rounded-xl border-2 border-indigo-100 flex items-center justify-between">
+                        <span class="text-xs font-black text-indigo-700 font-heiti">每获得多少积分增加 1 开心值</span>
+                        <input id="rules-happiness-ratio" type="number" class="w-16 p-2 rounded-lg border-2 border-white text-center font-black outline-none text-indigo-900">
+                    </div>
+                </section>
+                <section>
+                    <h3 class="text-base font-black mb-3 flex items-center gap-2">😊 开心转化</h3>
+                    <div class="bg-indigo-50 p-4 rounded-xl border-2 border-indigo-100 flex items-center justify-between">
+                        <span class="text-xs font-black text-indigo-700 font-heiti">每获得多少积分增加 1 开心值</span>
+                        <input id="rules-happiness-ratio" type="number" onchange="updateHappinessRatio(this.value)" class="w-16 p-2 rounded-lg border-2 border-white text-center font-black outline-none text-indigo-900">
+                    </div>
+                </section>
+                <section>
+                    <div class="flex justify-between items-center mb-3"><h3 class="text-base font-black text-emerald-600 font-heiti">✨ 奖励榜样</h3><button onclick="addRuleItem('reward')" class="text-[10px] bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-black">+ 新增</button></div>
+                    <div id="reward-rules-container" class="space-y-2"></div>
+                </section>
+                <section class="pb-6">
+                    <div class="flex justify-between items-center mb-3"><h3 class="text-base font-black text-rose-500 font-heiti">🔥 警示准则</h3><button onclick="addRuleItem('punish')" class="text-[10px] bg-rose-100 text-rose-700 px-3 py-1 rounded-full font-black">+ 新增</button></div>
+                    <div id="punish-rules-container" class="space-y-2"></div>
+                </section>
+            </div>
+            <div class="p-5 border-t-4 border-slate-100 bg-slate-50 flex justify-end shrink-0 w-full z-10">
+                <button onclick="saveAllRulesAndStages()" class="bg-emerald-500 text-white w-full md:w-auto px-8 py-3 rounded-xl font-black text-lg shadow-md border-b-4 border-emerald-700 hover:bg-emerald-600 active:translate-y-1 transition-all">
+                    ✓ 保存所有配置
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="system-modal" class="fixed inset-0 z-50 modal-enter flex items-center justify-center p-4">
+        <div onclick="toggleModal('system-modal', false)" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg border-4 border-indigo-900 overflow-hidden flex flex-col h-[70vh]">
+            <div class="p-6 bg-indigo-900 flex justify-between items-center text-white shrink-0">
+                <h2 class="text-xl font-black flex items-center gap-2 font-heiti">⚙️ 系统设置</h2>
+                <button onclick="toggleModal('system-modal', false)" class="text-white hover:text-rose-400 text-3xl transition-colors">✕</button>
+            </div>
+            <div class="flex-grow p-8 space-y-8 overflow-y-auto">
+                <section>
+                    <h4 class="font-black mb-4 text-sm font-heiti uppercase tracking-widest">📅 乐园历法设置</h4>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-3 gap-3 bg-slate-50 p-4 rounded-xl border-2 border-slate-100">
+                            <div class="flex flex-col gap-1">
+                                <label class="text-[10px] text-slate-400 font-black font-heiti">年</label>
+                                <input id="sys-year" type="number" onchange="updateSystemDate()" class="p-2 rounded-lg border-2 border-white text-center font-black outline-none">
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-[10px] text-slate-400 font-black font-heiti">月</label>
+                                <input id="sys-month" type="number" onchange="updateSystemDate()" class="p-2 rounded-lg border-2 border-white text-center font-black outline-none">
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-[10px] text-slate-400 font-black font-heiti">日</label>
+                                <input id="sys-day" type="number" onchange="updateSystemDate()" class="p-2 rounded-lg border-2 border-white text-center font-black outline-none">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3 bg-indigo-50 p-4 rounded-xl border-2 border-indigo-100">
+                            <div class="flex flex-col gap-1">
+                                <label class="text-[10px] text-indigo-400 font-black font-heiti">学期总周数</label>
+                                <input id="sys-total-weeks" type="number" onchange="updateSystemDate()" class="p-2 rounded-lg border-2 border-white text-center font-black outline-none">
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-[10px] text-indigo-400 font-black font-heiti">当前周</label>
+                                <input id="sys-current-week" type="number" onchange="updateSystemDate()" class="p-2 rounded-lg border-2 border-white text-center font-black outline-none">
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-[10px] text-indigo-400 font-black font-heiti">星期</label>
+                                <select id="sys-day-of-week" onchange="updateSystemDate()" class="p-2 rounded-lg border-2 border-white text-center font-black outline-none bg-white">
+                                    <option>星期一</option><option>星期二</option><option>星期三</option><option>星期四</option><option>星期五</option><option>星期六</option><option>星期日</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h4 class="font-black mb-4 text-sm font-heiti uppercase tracking-widest">🎨 乐园主题切换</h4>
+                    <div class="grid grid-cols-1 gap-3">
+                        <button onclick="setTheme('default')" class="flex items-center justify-between p-4 rounded-xl border-4 border-slate-100 hover:border-indigo-400 transition-all group">
+                            <span class="font-black">🏠 经典原力 (Default)</span>
+                            <div class="flex gap-1"><div class="w-4 h-4 bg-indigo-600 rounded-full"></div><div class="w-4 h-4 bg-amber-400 rounded-full"></div></div>
+                        </button>
+                        <button onclick="setTheme('space')" class="flex items-center justify-between p-4 rounded-xl border-4 border-slate-100 hover:border-purple-400 transition-all bg-[#f5f3ff] text-[#4c1d95]">
+                            <span class="font-black">🚀 梦幻星空 (Light Space)</span>
+                            <div class="flex gap-1"><div class="w-4 h-4 bg-[#9333ea] rounded-full"></div><div class="w-4 h-4 bg-[#c084fc] rounded-full"></div></div>
+                        </button>
+                        <button onclick="setTheme('candy')" class="flex items-center justify-between p-4 rounded-xl border-4 border-slate-100 hover:border-pink-400 transition-all bg-[#CCFBF1] text-[#db2777]">
+                            <span class="font-black">🍭 糖果多巴胺 (Candy Pop)</span>
+                            <div class="flex gap-1"><div class="w-4 h-4 bg-[#f472b6] rounded-full"></div><div class="w-4 h-4 bg-[#facc15] rounded-full"></div></div>
+                        </button>
+                        <button onclick="setTheme('nature')" class="flex items-center justify-between p-4 rounded-xl border-4 border-slate-100 hover:border-amber-700 transition-all bg-[#064E3B] text-[#fef3c7]">
+                            <span class="font-black">🌿 森林奇遇记 (Wild Nature)</span>
+                            <div class="flex gap-1"><div class="w-4 h-4 bg-[#78350f] rounded-full"></div><div class="w-4 h-4 bg-[#10b981] rounded-full"></div></div>
+                        </button>
+                        <button onclick="setTheme('cyber')" class="flex items-center justify-between p-4 rounded-xl border-4 border-slate-700 hover:border-pink-500 transition-all bg-[#0f172a] text-[#f8fafc]">
+                            <span class="font-black">⚡️ 赛博霓虹 (Cyber Neon)</span>
+                            <div class="flex gap-1"><div class="w-4 h-4 bg-[#ec4899] rounded-full"></div><div class="w-4 h-4 bg-[#06b6d4] rounded-full"></div></div>
+                        </button>
+                        <button onclick="setTheme('sunset')" class="flex items-center justify-between p-4 rounded-xl border-4 border-slate-100 hover:border-orange-500 transition-all bg-[#fff7ed] text-[#7c2d12]">
+                            <span class="font-black">🌅 迈阿密落日 (Miami Sunset)</span>
+                            <div class="flex gap-1"><div class="w-4 h-4 bg-[#ea580c] rounded-full"></div><div class="w-4 h-4 bg-[#db2777] rounded-full"></div></div>
+                        </button>
+                        <button onclick="setTheme('ocean')" class="flex items-center justify-between p-4 rounded-xl border-4 border-slate-100 hover:border-sky-500 transition-all bg-[#f0f9ff] text-[#082f49]">
+                            <span class="font-black">🌊 深海珊瑚 (Deep Ocean)</span>
+                            <div class="flex gap-1"><div class="w-4 h-4 bg-[#0284c7] rounded-full"></div><div class="w-4 h-4 bg-[#f43f5e] rounded-full"></div></div>
+                        </button>
+                        <button onclick="setTheme('lemon')" class="flex items-center justify-between p-4 rounded-xl border-4 border-slate-100 hover:border-blue-500 transition-all bg-[#fefce8] text-[#172554]">
+                            <span class="font-black">🍋 夏日青柠 (Summer Lemon)</span>
+                            <div class="flex gap-1"><div class="w-4 h-4 bg-[#3b82f6] rounded-full"></div><div class="w-4 h-4 bg-[#eab308] rounded-full"></div></div>
+                        </button>
+                    </div>
+                </section>
+                <section>
+                    <h4 class="font-black mb-4 text-sm font-heiti uppercase tracking-widest">💾 数据管理</h4>
+                    <div class="grid grid-cols-1 gap-3">
+                        <button onclick="exportData()" class="w-full py-3 bg-indigo-100 text-indigo-700 rounded-xl text-xs font-black border-2 border-indigo-200 hover:bg-indigo-200 transition-all">📤 导出数据 (JSON)</button>
+                        <div class="flex gap-3">
+                            <input type="file" id="import-input" accept=".json" class="hidden" onchange="importData(this)">
+                            <button onclick="document.getElementById('import-input').click()" class="flex-grow py-3 bg-emerald-100 text-emerald-700 rounded-xl text-xs font-black border-2 border-emerald-200 hover:bg-emerald-200 transition-all">📥 导入数据</button>
+                            <button onclick="clearAllData()" class="flex-grow py-3 bg-rose-100 text-rose-700 rounded-xl text-xs font-black border-2 border-rose-200 hover:bg-rose-200 transition-all">🗑️ 清空所有数据</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-modal" class="fixed inset-0 z-50 modal-enter flex items-center justify-center p-4">
+        <div onclick="toggleModal('admin-modal', false)" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-4xl border-4 border-indigo-900 overflow-hidden flex flex-col h-[80vh]">
+            <div class="p-6 bg-blue-500 border-b-4 border-indigo-900 flex justify-between items-center text-white shrink-0">
+                <h2 class="text-2xl font-black flex items-center gap-2 font-heiti">🛠️ 班级管理</h2>
+                <button onclick="toggleModal('admin-modal', false)" class="text-white hover:text-rose-200 text-3xl transition-colors">✕</button>
+            </div>
+            <div class="flex bg-slate-100 px-6 pt-4 gap-4 border-b-2 border-slate-200 overflow-x-auto custom-scrollbar shrink-0">
+                <button onclick="switchAdminTab('class')" id="atab-class" class="px-6 py-4 text-lg font-black tab-active-blue transition-all whitespace-nowrap">班级设置</button>
+                <button onclick="switchAdminTab('member')" id="atab-member" class="px-6 py-4 text-lg font-black text-slate-400 transition-all whitespace-nowrap">成员管理</button>
+                <button onclick="switchAdminTab('group')" id="atab-group" class="px-6 py-4 text-lg font-black text-slate-400 transition-all whitespace-nowrap">小组分配</button>
+                <button onclick="switchAdminTab('pets')" id="atab-pets" class="px-6 py-4 text-lg font-black text-slate-400 transition-all whitespace-nowrap">学生宠物</button>
+                <button onclick="switchAdminTab('data')" id="atab-data" class="px-6 py-4 text-lg font-black text-slate-400 transition-all whitespace-nowrap">数据报表</button>
+            </div>
+            <div class="flex-grow overflow-y-auto p-8 custom-scrollbar">
+                <div id="apanel-class" class="space-y-6">
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-indigo-100 flex gap-4"><input id="new-class-input" type="text" placeholder="输入班级名称..." class="flex-grow p-4 rounded-xl border-2 border-white bg-white font-black text-lg outline-none focus:border-indigo-300 shadow-inner"><button onclick="createNewClass()" class="bg-indigo-600 text-white px-8 rounded-xl font-black text-lg shadow-md hover:bg-indigo-700">创建班级</button></div>
+                    <div id="class-list-admin" class="grid grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                </div>
+                <div id="apanel-member" class="hidden space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 p-6 rounded-2xl border-2 border-slate-100 flex flex-col gap-3">
+                            <span class="text-xs font-black text-slate-400 uppercase font-heiti">单一添加</span>
+                            <div class="flex gap-3">
+                                <input id="m-owner" type="text" placeholder="输入学生姓名..." class="flex-grow p-4 rounded-xl border-2 border-white font-black text-lg outline-none focus:border-indigo-300 shadow-inner">
+                                <button onclick="mAddStudent()" class="bg-blue-600 text-white px-8 rounded-xl font-black text-lg shadow-md hover:bg-blue-700">添加</button>
+                            </div>
+                        </div>
+                        <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-indigo-100 flex flex-col gap-3">
+                            <span class="text-xs font-black text-indigo-400 uppercase font-heiti">批量导入 (名字间用空格或逗号隔开)</span>
+                            <div class="flex gap-3">
+                                <textarea id="m-batch-names" placeholder="例如：张三 李四 王五..." class="flex-grow p-3 rounded-xl border-2 border-white font-bold text-sm outline-none focus:border-indigo-300 shadow-inner h-16 resize-none custom-scrollbar"></textarea>
+                                <button onclick="mBatchAddStudents()" class="bg-indigo-600 text-white px-6 rounded-xl font-black text-base shadow-md hover:bg-indigo-700">一键导入</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="m-student-list" class="grid grid-cols-3 lg:grid-cols-5 gap-3"></div>
+                </div>
+                <div id="apanel-group" class="hidden space-y-6">
+                    <div class="bg-emerald-50 p-6 rounded-2xl border-2 border-emerald-100 flex gap-4"><input id="m-group-name" type="text" placeholder="小组名称..." class="flex-grow p-4 rounded-xl border-2 border-white outline-none focus:border-emerald-300 font-black text-lg shadow-inner"><button onclick="mAddGroup()" class="bg-emerald-600 text-white px-10 rounded-xl font-black text-lg shadow-md">创建小组</button></div>
+                    <div id="m-group-list" class="grid grid-cols-2 gap-4"></div>
+                </div>
+                <div id="apanel-pets" class="hidden space-y-6">
+                    <div class="grid grid-cols-1 gap-4" id="m-pets-list"></div>
+                </div>
+                <div id="apanel-data" class="hidden space-y-8">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-rose-50 p-6 rounded-2xl text-center border-2 border-rose-100 flex flex-col items-center justify-center min-h-[120px]"><span class="text-[10px] text-rose-500 font-black block mb-1">个人最高</span><div id="data-max-ind"></div></div>
+                        <div class="bg-blue-50 p-6 rounded-2xl text-center border-2 border-blue-100 flex flex-col items-center justify-center min-h-[120px]"><span class="text-[10px] text-blue-500 font-black block mb-1">个人平均</span><p id="data-avg-ind" class="text-3xl font-black text-blue-600">0.0</p></div>
+                        <div class="bg-amber-50 p-6 rounded-2xl text-center border-2 border-amber-100 flex flex-col items-center justify-center min-h-[120px]"><span class="text-[10px] text-amber-600 font-black block mb-1">小组最高</span><div id="data-max-grp"></div></div>
+                        <div class="bg-indigo-50 p-6 rounded-2xl text-center border-2 border-indigo-100 flex flex-col items-center justify-center min-h-[120px]"><span class="text-[10px] text-indigo-500 font-black block mb-1">小组平均</span><p id="data-avg-grp" class="text-3xl font-black text-indigo-600">0.0</p></div>
+                    </div>
+                    <div id="apanel-data-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pet-setup-modal" class="fixed inset-0 z-[70] modal-enter flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md" onclick="toggleModal('pet-setup-modal', false)"></div>
+        <div class="relative bg-white rounded-[2.5rem] p-10 w-full max-w-lg flex flex-col items-center border-4 border-indigo-900 shadow-2xl">
+            <button onclick="toggleModal('pet-setup-modal', false)" class="absolute top-6 right-6 text-slate-300 hover:text-rose-500 text-3xl transition-colors">✕</button>
+            <h2 class="text-2xl font-black mb-6 font-heiti text-indigo-900">🥚 奇迹孵化</h2>
+            <div id="pet-setup-preview" class="w-28 h-28 rounded-[2rem] relative animate-float mb-6 shadow-xl border-4 border-white bg-slate-100"></div>
+            <input id="pet-setup-name" type="text" placeholder="给它取个名字..." class="w-full p-3 rounded-xl border-2 border-slate-200 mb-6 text-center font-black text-xl outline-none focus:border-indigo-400 text-indigo-900">
+            <div class="w-full mb-8">
+                <p class="text-xs font-black text-slate-400 mb-3 text-center uppercase tracking-widest font-heiti">选择你的初始伙伴</p>
+                <div id="pet-selection-options" class="grid grid-cols-4 gap-3 max-h-48 overflow-y-auto p-2 custom-scrollbar"></div>
+            </div>
+            <button onclick="savePetSetup()" id="btn-start-hatch" class="w-full bg-indigo-700 text-white py-4 rounded-xl font-black text-xl border-b-4 border-indigo-950 hover:bg-indigo-800 active:translate-y-1 transition-all">开始孵化！ 🐣</button>
+        </div>
+    </div>
+
+    <div id="batch-rule-modal" class="fixed inset-0 z-[100] modal-enter flex items-center justify-center p-4">
+        <div onclick="toggleModal('batch-rule-modal', false)" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-xs overflow-hidden flex flex-col border-4 border-indigo-900">
+            <div class="p-4 border-b-2 border-slate-100 bg-slate-50 flex justify-between items-center shrink-0">
+                <h3 id="batch-rule-title" class="font-black text-slate-700 text-sm font-heiti">选择应用规则</h3>
+                <button onclick="toggleModal('batch-rule-modal', false)" class="text-slate-400 hover:text-rose-500 text-2xl transition-colors">✕</button>
+            </div>
+            <div id="batch-rules-list" class="p-4 space-y-2 max-h-80 overflow-y-auto custom-scrollbar"></div>
+        </div>
+    </div>
+
+    <div id="batch-edit-modal" class="fixed inset-0 z-[110] modal-enter flex items-center justify-center p-4">
+        <div onclick="toggleModal('batch-edit-modal', false)" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col h-[60vh] border-4 border-indigo-900">
+            <div class="p-6 border-b-2 border-slate-100 flex justify-between items-center bg-slate-50 shrink-0">
+                <h2 class="text-xl font-black font-heiti">✏️ 成员批量管理</h2>
+                <button onclick="toggleModal('batch-edit-modal', false)" class="text-slate-400 hover:text-rose-500 text-3xl transition-colors">✕</button>
+            </div>
+            <div class="flex-grow p-6 overflow-y-auto custom-scrollbar">
+                <div id="batch-edit-list" class="space-y-4"></div>
+            </div>
+            <div class="p-6 bg-slate-50 border-t-2 border-slate-100 flex justify-end shrink-0">
+                <button onclick="toggleModal('batch-edit-modal', false)" class="bg-indigo-600 text-white px-8 py-3 rounded-xl font-black text-base shadow-md">完成保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="class-switcher-modal" class="fixed inset-0 z-[60] modal-enter flex items-center justify-center p-4">
+        <div onclick="toggleModal('class-switcher-modal', false)" class="absolute inset-0 bg-black/20 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-xs p-6 border-4 border-indigo-900">
+            <button onclick="toggleModal('class-switcher-modal', false)" class="absolute top-4 right-4 text-slate-300 hover:text-rose-500 text-2xl transition-colors">✕</button>
+            <h3 class="font-black mb-4 text-center text-sm font-heiti uppercase">🏫 传送至新班级</h3>
+            <div id="quick-class-list" class="space-y-2 max-h-60 overflow-y-auto custom-scrollbar pr-1"></div>
+        </div>
+    </div>
+
+    <div id="guide-modal" class="fixed inset-0 z-50 modal-enter flex items-center justify-center p-4">
+        <div onclick="toggleModal('guide-modal', false)" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-2xl border-4 border-indigo-900 overflow-hidden flex flex-col h-[70vh]">
+            <div class="p-6 bg-rose-500 flex justify-between items-center text-white shrink-0">
+                <h2 class="text-xl font-black font-heiti">📖 冒险家手册</h2>
+                <button onclick="toggleModal('guide-modal', false)" class="text-white hover:text-rose-200 text-3xl transition-colors">✕</button>
+            </div>
+            <div class="p-8 overflow-y-auto custom-scrollbar">
+                <div class="space-y-6">
+                    <div class="bg-slate-50 p-6 rounded-2xl border-2 border-slate-100">
+                        <h4 class="text-lg font-black mb-2 font-heiti">1. 成员入驻</h4>
+                        <p class="text-xs leading-relaxed font-bold opacity-70">在“班级管理”中录入学生名单，系统会为每人生成一张专属成长卡片。</p>
+                    </div>
+                    <div class="bg-amber-50 p-6 rounded-2xl border-2 border-amber-100">
+                        <h4 class="text-lg font-black mb-2 font-heiti">2. 宠物养成</h4>
+                        <p class="text-xs leading-relaxed font-bold opacity-70">点击卡片上的“+”号进行孵化。随着积分增加，宠物会经历阶段性进化。单击“班级管理”--“学生宠物”--“一键随机分派”可为未领养宠物的学生随机分配宠物。</p>
+                    </div>
+                    <div class="bg-emerald-50 p-6 rounded-2xl border-2 border-emerald-100">
+                        <h4 class="text-lg font-black mb-2 font-heiti">3. 积分奖惩</h4>
+                        <p class="text-xs leading-relaxed font-bold opacity-70">应用预设规则。积分可以用来在“积分商城”兑换奖励，或是宠物补给品。教师可自行添加及编辑商品。</p>
+                    </div>
+                    <div class="bg-indigo-50 p-6 rounded-2xl border-2 border-indigo-100">
+                        <h4 class="text-lg font-black mb-2 font-heiti">4. 再次领养</h4>
+                        <p class="text-xs leading-relaxed font-bold opacity-70">宠物满级（成熟期且满分）后，你可以点击“完成旅程”并选择新的宠物伙伴重新开始！</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div id="pet-history-modal" class="fixed inset-0 z-[120] modal-enter flex items-center justify-center p-4">
+        <div onclick="toggleModal('pet-history-modal', false)" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-2xl border-4 border-indigo-900 overflow-hidden flex flex-col h-[60vh]">
+            <div class="p-6 bg-amber-400 flex justify-between items-center text-indigo-900 shrink-0 border-b-4 border-indigo-900">
+                <h2 class="text-xl font-black font-heiti" id="pet-history-title">🏆 历届荣誉馆</h2>
+                <button onclick="toggleModal('pet-history-modal', false)" class="text-indigo-900 hover:text-white text-3xl transition-colors">✕</button>
+            </div>
+            <div class="p-8 overflow-y-auto custom-scrollbar flex-grow bg-slate-50">
+                <div id="pet-history-list" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const PET_DATABASE = [
+            { id: 'cat1', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/npAU/1024X1024/%E7%99%BD%E7%8C%AB1.png')]", name: '白猫', desc: '优雅的云朵精灵。虽然外表看着高冷，但其实是个极度粘人的撒娇怪！' },
+            { id: 'cat2', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/jaND/1024X1024/%E5%B8%83%E5%81%B6%E7%8C%AB1.png')]", name:'布偶猫' , desc: '传说中的“仙女猫”。抱起来像一滩软绵绵的棉花糖，在这个世界，颜值即正义！' },
+            { id: 'cat3', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/F7yi/1024X1024/%E6%A9%98%E7%8C%AB1.png')]", name: '橘猫', desc: '十个橘猫九个胖，还有一个压塌炕。自带“干饭人”属性的绝对乐天派！' },
+            { id: 'cat4', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/BvDJ/1024X1024/%E5%A5%B6%E7%89%9B%E7%8C%AB1.png')]", name: '奶牛猫', desc: '猫界“二哈”。穿着最帅的黑白燕尾服，却总干出最神经质的搞笑蠢事。' },
+            { id: 'cat5', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/OzRY/1024X1024/%E9%BB%91%E7%8C%AB1.png')]", name: '黑猫', desc: '隐匿在黑夜里的酷飒刺客。双眼像两颗悬浮的黄宝石，不仅辟邪还能招财哦。' },
+            { id: 'cat6', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/RTbg/1024X1024/%E7%8B%B8%E8%8A%B1%E7%8C%AB1.png')]", name: '狸花猫', desc: '战力爆表的丛林小猎手，咱们中国本土的骄傲！捕鼠捉虫只在弹指一挥间。' },
+            { id: 'dog1', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/RPho/1024X1024/%E9%87%91%E6%AF%9B1.png')]", name: '金毛', desc: '汪星人的“大暖男”。它那阳光灿烂的微笑，能瞬间治愈你所有的不开心。' },
+            { id: 'dog2', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/kAsX/1024X1024/%E8%BE%B9%E7%89%A71_%282%29.png')]", name: '边牧', desc: '智商常年霸榜，甚至有时会嫌弃主人笨。千万别和它玩捉迷藏，你赢不了的！' },
+            { id: 'dog3', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/POao/1024X1024/%E6%9F%B4%E7%8A%AC1.png')]", name: '柴犬', desc: '行走的表情包。拥有极具个性的“倔强脸”和能治愈一切的神奇飞机耳。' },
+            { id: 'dog4', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/Ft2U/1024X1024/%E6%B3%B0%E8%BF%AA1.png')]", name: '泰迪犬', desc: '顶着一头自来卷的精明小机灵鬼。不仅不掉毛，还特别会察言观色讨人欢心。' },
+            { id: 'dog5', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/37oN/1024X1024/%E6%9D%9C%E5%AE%BE1.png')]", name: '杜宾犬', desc: '帅到掉渣的西装暴徒！外表冷酷威严，内心其实是个极其护主的小傲娇。' },
+            { id: 'dog6', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/3Hoy/1024X1024/%E6%AF%94%E7%86%8A1.png')]", name: '比熊犬', desc: '永远快乐的“行走的棉花糖”。只要给它一点零食，就能乐得像个小疯子。' },
+            { id: 'dog6', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/uhQ6/1024X1024/%E9%98%BF%E6%8B%89%E6%96%AF%E5%8A%A01.png')]", name: '阿拉斯加犬', desc: '别看它体型巨大像个霸道总裁，其实是个体能满格的“傻白甜”。' },
+            { id: 'dog6', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/CBnP/2048X2048/%E4%B8%AD%E5%8D%8E%E7%94%B0%E5%9B%AD%E7%8A%AC1.png')]", name: '中华田园犬', desc: '忠诚度拉满的“大黄”。看家护院一把好手，也是最懂你的贴心老铁。' },
+            { id: 'dog6', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/rfSK/2048X2048/%E9%B8%A11.png')]", name: '鸡', desc: '每天准时打鸣的天然闹钟。虽然不太会飞，但在院子里跑起来可比谁都快。' },
+            { id: 'dog6', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/8nNk/2048X2048/%E9%B8%AD1.png')]", name: '鸭', desc: '顶着扁扁嘴的游泳健将。走起路来摇摇摆摆，最爱在水里上演“嘎嘎嘎”的多重奏。' },
+            { id: 'dog6', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/WTLc/2048X2048/%E9%B9%851.png')]", name: '鹅', desc: '农场村霸本霸！战斗力惊人，敢于向一切不明生物发起冲锋，惹谁都别惹它。' },
+            { id: 'mouse', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/yz15/1024X1024/%E4%BB%93%E9%BC%A01.png')]", name: '仓鼠', desc: '越狱大师兼“跑轮永动机”。它那弹性的脸颊，可以藏下比自己头还大的瓜子！' },
+            { id: 'ciwei', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/GFDf/2048X2048/%E5%88%BA%E7%8C%AC1.png')]", name: '刺猬', desc: '披着铠甲的社恐小可爱。一旦跟你混熟了，就会毫不防备地向你敞开软乎乎的小肚肚。' },
+            { id: 'rabbit1', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/nJ4J/2048X2048/%E8%8D%B7%E5%85%B0%E5%85%941.png')]", name: '荷兰兔', desc: '穿着雪白的小礼服，拥有一对竖着的小短耳。只需稍微蹦跶一下就能萌化人心。' },
+            { id: 'rabbit2', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Gkxu/2048X2048/%E5%9E%82%E8%80%B3%E5%85%94.png/webp')]", name: '垂耳兔', desc: '耳朵耷拉在两边的毛绒团子。总是一副委屈巴巴的小可怜模样，让人忍不住想揉揉。' },
+            { id: 'bird1', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/a2JQ/2048X2048/%E7%8E%84%E5%87%A41.png')]", name: '玄凤鹦鹉', desc: '顶着一头炫酷的呆毛，脸蛋上自带两坨红脸蛋，堪称鸟界第一“口哨大师”。' },
+            { id: 'bird2', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Jyll/2048X2048/%E7%89%A1%E4%B8%B91.png')]", name: '牡丹鹦鹉', desc: '色彩斑斓的“爱情鸟”。性格活泼好动，不仅嗓门大，还是个无情的嗑瓜子机器。' },
+            { id: 'bird3', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Olxc/2048X2048/%E9%87%91%E5%A4%AA%E9%98%B31.png')]", name: '金太阳鹦鹉', desc: '披着夕阳般绚丽羽毛的小太阳。极度粘人，根本就是一只披着鸟皮的“小狗”。' },
+            { id: 'wugui', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Poaa/2048X2048/%E4%B9%8C%E9%BE%9F1.png')]", name: '乌龟', desc: '佛系养生的终极代表。遇到困难就缩头，只要活得够久，就能熬走所有的烦恼。' },
+            { id: 'shougong', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/EkrN/2048X2048/%E5%AE%88%E5%AE%AB1.png')]", name: '守宫', desc: '拥有一双水汪汪大眼睛的“微笑天使”。它还能在墙壁上施展飞檐走壁的绝世轻功！' },
+            { id: 'xiyi', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/l4kX/2048X2048/%E9%AC%83%E7%8B%AE%E8%9C%A51.png')]", name: '鬃狮蜥', desc: '外表看起来像只迷你的远古小恐龙，内心却是温顺的“呆头鹅”，晒太阳是它的终极爱好。' },
+        ];
+
+        const PET_EVOLUTION_MAP = {
+            "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/npAU/1024X1024/%E7%99%BD%E7%8C%AB1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/npAU/1024X1024/%E7%99%BD%E7%8C%AB1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/asWz/1024X1024/%E7%99%BD%E7%8C%AB2.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/lxs6/1024X1024/%E7%99%BD%E7%8C%AB3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/Ruci/1024X1024/%E7%99%BD%E7%8C%AB4.png')"
+            ],
+            "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/jaND/1024X1024/%E5%B8%83%E5%81%B6%E7%8C%AB1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/jaND/1024X1024/%E5%B8%83%E5%81%B6%E7%8C%AB1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/G780/1024X1024/%E5%B8%83%E5%81%B6%E7%8C%AB2_%282%29.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/umj4/1024X1024/%E5%B8%83%E5%81%B6%E7%8C%AB3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/EL0o/1024X1024/%E5%B8%83%E5%81%B6%E7%8C%AB4.png')"
+            ],
+            "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/F7yi/1024X1024/%E6%A9%98%E7%8C%AB1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/F7yi/1024X1024/%E6%A9%98%E7%8C%AB1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/xdvt/1024X1024/%E6%A9%98%E7%8C%AB2.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/fkMy/1024X1024/%E6%A9%98%E7%8C%AB3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260208/VwxN/1024X1024/%E6%A9%98%E7%8C%AB4.png')"
+            ],
+            "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/BvDJ/1024X1024/%E5%A5%B6%E7%89%9B%E7%8C%AB1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/BvDJ/1024X1024/%E5%A5%B6%E7%89%9B%E7%8C%AB1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/WnF9/1024X1024/%E5%A5%B6%E7%89%9B%E7%8C%AB22.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/13hm/1024X1024/%E5%A5%B6%E7%89%9B%E7%8C%AB3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/DXPh/1024X1024/%E5%A5%B6%E7%89%9B%E7%8C%AB4.png')"
+            ],
+            "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/OzRY/1024X1024/%E9%BB%91%E7%8C%AB1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/OzRY/1024X1024/%E9%BB%91%E7%8C%AB1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Eg5g/1024X1024/%E9%BB%91%E7%8C%AB2.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/EQ2P/1024X1024/%E9%BB%91%E7%8C%AB3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/bHQG/1024X1024/%E9%BB%91%E7%8C%AB4.png')"
+            ],
+            "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/RTbg/1024X1024/%E7%8B%B8%E8%8A%B1%E7%8C%AB1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/RTbg/1024X1024/%E7%8B%B8%E8%8A%B1%E7%8C%AB1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/zpW0/1024X1024/%E7%8B%B8%E8%8A%B1%E7%8C%AB2.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/DlGA/1024X1024/%E7%8B%B8%E8%8A%B1%E7%8C%AB3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/ZKGX/1024X1024/%E7%8B%B8%E8%8A%B1%E7%8C%AB4.png')"
+            ],
+            "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/RPho/1024X1024/%E9%87%91%E6%AF%9B1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/RPho/1024X1024/%E9%87%91%E6%AF%9B1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/gXpJ/1024X1024/%E9%87%91%E6%AF%9B2.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/CWjm/1024X1024/%E9%87%91%E6%AF%9B3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/GmNE/1024X1024/%E9%87%91%E6%AF%9B4.png')"
+            ],
+            "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/kAsX/1024X1024/%E8%BE%B9%E7%89%A71_%282%29.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/kAsX/1024X1024/%E8%BE%B9%E7%89%A71_%282%29.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/qQ4d/1024X1024/%E8%BE%B9%E7%89%A72_%282%29.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/E55x/1024X1024/%E8%BE%B9%E7%89%A73.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/LSv5/1024X1024/%E8%BE%B9%E7%89%A74.png')"
+            ],
+            "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/POao/1024X1024/%E6%9F%B4%E7%8A%AC1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/POao/1024X1024/%E6%9F%B4%E7%8A%AC1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/AH5R/1024X1024/%E6%9F%B4%E7%8A%AC2.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/lwLv/1024X1024/%E6%9F%B4%E7%8A%AC3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/rxOW/1024X1024/%E6%9F%B4%E7%8A%AC4.png')"
+            ],
+            "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/Ft2U/1024X1024/%E6%B3%B0%E8%BF%AA1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/Ft2U/1024X1024/%E6%B3%B0%E8%BF%AA1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/yYjb/1024X1024/%E6%B3%B0%E8%BF%AA2.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/3auy/1024X1024/%E6%B3%B0%E8%BF%AA3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/7q1D/1024X1024/%E6%B3%B0%E8%BF%AA4.png')"
+            ],
+            "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/37oN/1024X1024/%E6%9D%9C%E5%AE%BE1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/37oN/1024X1024/%E6%9D%9C%E5%AE%BE1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/w0fy/1024X1024/%E6%9D%9C%E5%AE%BE2.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/f1qA/1024X1024/%E6%9D%9C%E5%AE%BE3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/u6Bx/1024X1024/%E6%9D%9C%E5%AE%BE4.png')"
+            ],
+            "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/3Hoy/1024X1024/%E6%AF%94%E7%86%8A1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/3Hoy/1024X1024/%E6%AF%94%E7%86%8A1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/mAP6/1024X1024/%E6%AF%94%E7%86%8A2.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/y1GM/1024X1024/%E6%AF%94%E7%86%8A3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/YNTY/1024X1024/%E6%AF%94%E7%86%8A4.png')"
+            ],
+            "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/uhQ6/1024X1024/%E9%98%BF%E6%8B%89%E6%96%AF%E5%8A%A01.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/uhQ6/1024X1024/%E9%98%BF%E6%8B%89%E6%96%AF%E5%8A%A01.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/8cj9/1024X1024/%E9%98%BF%E6%8B%89%E6%96%AF%E5%8A%A02.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/NoO8/1024X1024/%E9%98%BF%E6%8B%89%E6%96%AF%E5%8A%A03.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/TmtT/1024X1024/%E9%98%BF%E6%8B%89%E6%96%AF%E5%8A%A04.png')"
+            ],
+             "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/rfSK/2048X2048/%E9%B8%A11.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/rfSK/2048X2048/%E9%B8%A11.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/99Mg/2048X2048/%E9%B8%A12.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/niLT/2048X2048/%E9%B8%A13.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/mhRb/2048X2048/%E9%B8%A14.png')"
+            ],
+             "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/8nNk/2048X2048/%E9%B8%AD1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/8nNk/2048X2048/%E9%B8%AD1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/619y/2048X2048/%E9%B8%AD2.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/sxCY/2048X2048/%E9%B8%AD3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/LXKi/2048X2048/%E9%B8%AD4.png')"
+            ],
+             "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/WTLc/2048X2048/%E9%B9%851.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/WTLc/2048X2048/%E9%B9%851.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/5T06/2048X2048/%E9%B9%852.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/FeaO/2048X2048/%E9%B9%853.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/5OyI/2048X2048/%E9%B9%854.png')"
+            ],
+             "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/CBnP/2048X2048/%E4%B8%AD%E5%8D%8E%E7%94%B0%E5%9B%AD%E7%8A%AC1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/CBnP/2048X2048/%E4%B8%AD%E5%8D%8E%E7%94%B0%E5%9B%AD%E7%8A%AC1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/zylk/2048X2048/%E4%B8%AD%E5%8D%8E%E7%94%B0%E5%9B%AD%E7%8A%AC2.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/6NUN/2048X2048/%E4%B8%AD%E5%8D%8E%E7%94%B0%E5%9B%AD%E7%8A%AC3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/aRrI/2048X2048/%E4%B8%AD%E5%8D%8E%E7%94%B0%E5%9B%AD%E7%8A%AC4.png')"
+            ],
+             "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/GFDf/2048X2048/%E5%88%BA%E7%8C%AC1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/GFDf/2048X2048/%E5%88%BA%E7%8C%AC1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/ulC9/2048X2048/%E5%88%BA%E7%8C%AC2.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Awcl/2048X2048/%E5%88%BA%E7%8C%AC3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/8UbK/2048X2048/%E5%88%BA%E7%8C%AC4.png')"
+            ],
+             "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/nJ4J/2048X2048/%E8%8D%B7%E5%85%B0%E5%85%941.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/nJ4J/2048X2048/%E8%8D%B7%E5%85%B0%E5%85%941.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/XVmF/2048X2048/%E8%8D%B7%E5%85%B0%E5%85%942.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/0SD9/2048X2048/%E8%8D%B7%E5%85%B0%E5%85%943.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/SBhj/2048X2048/%E8%8D%B7%E5%85%B0%E5%85%944.png')"
+            ],
+             "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Gkxu/2048X2048/%E5%9E%82%E8%80%B3%E5%85%94.png/webp')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Gkxu/2048X2048/%E5%9E%82%E8%80%B3%E5%85%94.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/PywY/2048X2048/%E5%9E%82%E8%80%B3%E5%85%942.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/iDD7/2048X2048/%E5%9E%82%E8%80%B3%E5%85%943.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/FCR3/2048X2048/%E5%9E%82%E8%80%B3%E5%85%944.png')"
+            ],
+             "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/a2JQ/2048X2048/%E7%8E%84%E5%87%A41.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/a2JQ/2048X2048/%E7%8E%84%E5%87%A41.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/fBAK/2048X2048/%E7%8E%84%E5%87%A42.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/tpKB/2048X2048/%E7%8E%84%E5%87%A43.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/63HH/2048X2048/%E7%8E%84%E5%87%A44.png')"
+            ],
+             "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Jyll/2048X2048/%E7%89%A1%E4%B8%B91.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Jyll/2048X2048/%E7%89%A1%E4%B8%B91.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/OgaG/2048X2048/%E7%89%A1%E4%B8%B92.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/4zCO/2048X2048/%E7%89%A1%E4%B8%B93_%282%29.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/wTWq/2048X2048/%E7%89%A1%E4%B8%B94.png')"
+            ],
+             "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Olxc/2048X2048/%E9%87%91%E5%A4%AA%E9%98%B31.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Olxc/2048X2048/%E9%87%91%E5%A4%AA%E9%98%B31.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/qN1b/2048X2048/%E9%87%91%E5%A4%AA%E9%98%B32.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/8yK1/2048X2048/%E9%87%91%E5%A4%AA%E9%98%B33.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/OsSq/2048X2048/%E9%87%91%E5%A4%AA%E9%98%B34.png')"
+            ],
+             "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Poaa/2048X2048/%E4%B9%8C%E9%BE%9F1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Poaa/2048X2048/%E4%B9%8C%E9%BE%9F1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Rscv/2048X2048/%E4%B9%8C%E9%BE%9F2.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/KNpo/2048X2048/%E4%B9%8C%E9%BE%9F3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/Roj2/2048X2048/%E4%B9%8C%E9%BE%9F4.png')"
+            ],
+             "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/EkrN/2048X2048/%E5%AE%88%E5%AE%AB1.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/EkrN/2048X2048/%E5%AE%88%E5%AE%AB1.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/MP65/2048X2048/%E5%AE%88%E5%AE%AB2.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/X2nh/2048X2048/%E5%AE%88%E5%AE%AB3.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/9zx0/2048X2048/%E5%AE%88%E5%AE%AB4.png')"
+            ],
+             "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/l4kX/2048X2048/%E9%AC%83%E7%8B%AE%E8%9C%A51.png')]": [
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/l4kX/2048X2048/%E9%AC%83%E7%8B%AE%E8%9C%A51.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/u0LR/2048X2048/%E9%AC%83%E7%8B%AE%E8%9C%A52.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/lArQ/2048X2048/%E9%AC%83%E7%8B%AE%E8%9C%A53.png')",
+                "url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/9ljY/2048X2048/%E9%AC%83%E7%8B%AE%E8%9C%A54.png')"
+            ],
+        };
+
+        const DEFAULT_STATE = {
+            classes: [{ id: 1, name: "快乐星球三班", students: [], groups: [] }],
+            currentClassId: 1,
+            viewMode: 'individual',
+            rankLevel: 'all',
+            rankType: 'individual',
+            isRankOpen: true, 
+            history: [],
+            currentStudentIdForPet: null,
+            selectedPetIndex: 0, 
+            isSelectionMode: false,
+            selectedIds: [],
+            shopTab: 'self',
+            selectedShopStudentId: null,
+            shopProducts: [
+                { id: 1, name: '免作业卡', points: 10, icon: '🎫', type: 'self', growth: 0 },
+                { id: 2, name: '棒棒糖一只', points: 2, icon: '🍭', type: 'self', growth: 0 },
+                { id: 3, name: '高级宠物口粮', points: 5, icon: '🍪', type: 'self', growth: 10 },
+                { id: 4, name: '趣味宠物玩具', points: 8, icon: '🧸', type: 'self', growth: 15 }
+            ],
+            currentSystemDate: { y: 2024, m: 1, d: 1 },
+            currentSemesterInfo: { totalWeeks: 20, currentWeek: 1, dayOfWeek: '星期一' },
+            config: {
+                stages: { infant: 50, teen: 150, adult: 300, elder: 500 },
+                rewardRules: [{ id: 1, name: '认真听讲', points: 5 }, { id: 2, name: '作业全对', points: 10 }],
+                punishRules: [{ id: 1, name: '迟到早退', points: 5 }],
+                pointsPerHappiness: 10
+            }
+        };
+
+        let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+        let editingShopProductId = null;
+        const STORAGE_KEY = 'class_paradise_data_v2';
+
+        // ================= 云端自动同步引擎 =================
+        let saveTimeout = null;
+        let cloudClassIdMap = {}; // 记录每个班级的云端抽屉号
+
+        function saveStateToLocal() { 
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); 
+            
+            if(saveTimeout) clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                if (currentCloudDataId && Bmob.User.current()) {
+                    const username = Bmob.User.current().username;
+
+                    // 1. 拆包：把沉重的班级详细数据剥离出来
+                    const cloudState = JSON.parse(JSON.stringify(state));
+                    cloudState.history = []; 
+                    const fullClassesData = cloudState.classes;
+                    cloudState.classes = fullClassesData.map(c => ({ id: c.id, name: c.name, students: [], groups: [] }));
+
+                    // 2. 更新全局大厅 
+                    const query = Bmob.Query('CloudSaveData');
+                    query.set('id', currentCloudDataId); 
+                    query.set('appData', JSON.stringify(cloudState)); 
+                    query.save().catch(err => console.error("全局保存异常:", err));
+
+                    // 3. 更新当前专属班级房间
+                    const currentCls = fullClassesData.find(c => c.id === state.currentClassId);
+                    if (currentCls) {
+                        if (cloudClassIdMap[currentCls.id]) {
+                            const updateQ = Bmob.Query('CloudClassData');
+                            updateQ.set('id', cloudClassIdMap[currentCls.id]);
+                            updateQ.set('classData', JSON.stringify(currentCls));
+                            updateQ.save();
+                        } else {
+                            const findQ = Bmob.Query('CloudClassData');
+                            findQ.equalTo('username', '==', username);
+                            findQ.equalTo('classId', '==', currentCls.id);
+                            findQ.find().then(res => {
+                                if (res.length > 0) {
+                                    cloudClassIdMap[currentCls.id] = res[0].objectId;
+                                    const updateQ = Bmob.Query('CloudClassData');
+                                    updateQ.set('id', res[0].objectId);
+                                    updateQ.set('classData', JSON.stringify(currentCls));
+                                    updateQ.save();
+                                } else {
+                                    const insertQ = Bmob.Query('CloudClassData');
+                                    insertQ.set('username', username);
+                                    insertQ.set('classId', currentCls.id);
+                                    insertQ.set('classData', JSON.stringify(currentCls));
+                                    insertQ.save().then(r => cloudClassIdMap[currentCls.id] = r.objectId);
+                                }
+                            });
+                        }
+                    }
+                }
+            }, 1500); 
+        }
+
+        const getCurrentClass = () => state.classes.find(c => c.id === state.currentClassId) || state.classes[0];
+
+        function pushHistory(desc) {
+            const snapshot = JSON.parse(JSON.stringify(state));
+            delete snapshot.history;
+            state.history.push({ snapshot, desc });
+            if (state.history.length > 50) state.history.shift();
+            saveStateToLocal();
+        }
+
+        function undoAction() {
+            if (!state.history || !state.history.length) return;
+            const currentHistory = state.history;
+            const prev = currentHistory.pop();
+            state = prev.snapshot;
+            state.history = currentHistory;
+            saveStateToLocal();
+            renderAll();
+            renderAdminPanels();
+            const curClass = getCurrentClass();
+            if(curClass) document.getElementById('display-title').innerText = curClass.name;
+            updateDisplayDate();
+            initStageInputs();
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('class-paradise-theme', theme);
+        }
+
+        // ================= 商业云端 SaaS 核心逻辑 =================
+        // ⚠️【极其重要】：请把下面双引号里的内容，换成你 Bmob 后台里的真实钥匙！
+        Bmob.initialize("5f1587aa536ab4d8", "1234567890987654"); 
+
+        let currentCloudDataId = null; // 记住当前登录老师的云端存档抽屉编号
+
+        function checkAuthState() {
+            const currentUser = Bmob.User.current();
+            const gate = document.getElementById('auth-gate-container');
+            const loginRegArea = document.getElementById('auth-login-reg-area');
+            const actArea = document.getElementById('auth-activate-area');
+
+            if (currentUser) {
+                loginRegArea.classList.add('hidden');
+                document.getElementById('display-username').innerText = currentUser.username;
+                
+                const query = Bmob.Query("CloudSaveData");
+                query.equalTo("username", "==", currentUser.username);
+                query.find().then(res => {
+                    if (res && res.length > 0) {
+                        currentCloudDataId = res[0].objectId; 
+                        gate.style.display = 'none'; 
+                        try {
+                            const cloudState = JSON.parse(res[0].appData);
+                            state = { ...DEFAULT_STATE, ...cloudState }; 
+                            if(cloudState.config) {
+                                state.config = { ...DEFAULT_STATE.config, ...cloudState.config };
+                                if(cloudState.config.stages) state.config.stages = { ...DEFAULT_STATE.config.stages, ...cloudState.config.stages };
+                            }
+                            state.isSelectionMode = false; state.selectedIds = [];
+                            
+                            // 拼图：去专属房间接回各班级详细数据
+                            const classQuery = Bmob.Query("CloudClassData");
+                            classQuery.equalTo("username", "==", currentUser.username);
+                            classQuery.limit(100); 
+                            classQuery.find().then(classRes => {
+                                if(classRes && classRes.length > 0) {
+                                    const detailedClasses = [];
+                                    classRes.forEach(item => {
+                                        const realClassData = JSON.parse(item.classData);
+                                        detailedClasses.push(realClassData);
+                                        cloudClassIdMap[realClassData.id] = item.objectId; 
+                                    });
+                                    state.classes = state.classes.map(shell => {
+                                        const detail = detailedClasses.find(d => d.id === shell.id);
+                                        return detail ? detail : shell; 
+                                    });
+                                }
+                                initMainApp(); 
+                            }).catch(err => {
+                                initMainApp();
+                            });
+                        } catch (e) { alert("云端数据读取失败！"); }
+                    } else {
+                        gate.style.display = 'flex';
+                        actArea.classList.remove('hidden');
+                    }
+                }).catch(err => { 
+                    gate.style.display = 'flex';
+                    actArea.classList.remove('hidden');
+                });
+            } else {
+                gate.style.display = 'flex';
+                loginRegArea.classList.remove('hidden');
+                actArea.classList.add('hidden');
+            }
+        }
+
+        function toggleLoginMode(isLogin) {
+            document.getElementById('mode-login-btn').className = isLogin ? "flex-grow py-3 text-sm font-black bg-indigo-600 text-white rounded-lg shadow-sm transition-all" : "flex-grow py-3 text-sm font-black text-indigo-400 hover:bg-white rounded-lg transition-all";
+            document.getElementById('mode-reg-btn').className = (!isLogin) ? "flex-grow py-3 text-sm font-black bg-indigo-600 text-white rounded-lg shadow-sm transition-all" : "flex-grow py-3 text-sm font-black text-indigo-400 hover:bg-white rounded-lg transition-all";
+            document.getElementById('auth-submit-btn').innerText = isLogin ? "登 录 账 号" : "注 册 新 账 号";
+            document.getElementById('auth-submit-btn').onclick = isLogin ? handleLogin : handleRegister;
+        }
+
+        function handleRegister() {
+            const u = document.getElementById('auth-username').value.trim();
+            const p = document.getElementById('auth-password').value.trim();
+            if(!u || !p) return alert("账号和密码不能为空！");
+            if(p.length < 6) return alert("为了安全，密码至少需要6位哦！");
+            
+            const btn = document.getElementById('auth-submit-btn');
+            btn.innerText = "⏳ 注册中..."; btn.disabled = true;
+
+            // 向 Bmob 注册新用户
+            Bmob.User.register({ username: u, password: p }).then(res => {
+                // 🌟 核心修复补丁：注册成功后，必须立刻向云端请求“自动登录”！
+                Bmob.User.login(u, p).then(loginRes => {
+                    alert("🎉 注册成功！接下来请绑定激活码。");
+                    btn.innerText = "注 册 新 账 号"; btn.disabled = false; // 解锁按钮
+                    checkAuthState(); // 登录成功，正式进入下一步验证
+                }).catch(err => {
+                    alert("自动登录异常，请点击上面的【登录】按钮手动登录！");
+                    btn.innerText = "注 册 新 账 号"; btn.disabled = false;
+                });
+            }).catch(err => {
+                alert("❌ 注册失败：用户名可能已经被别人抢占了，换个名字试试吧！");
+                btn.innerText = "注 册 新 账 号"; btn.disabled = false;
+            });
+        }
+
+        function handleLogin() {
+            const u = document.getElementById('auth-username').value.trim();
+            const p = document.getElementById('auth-password').value.trim();
+            if(!u || !p) return alert("账号和密码不能为空！");
+            
+            const btn = document.getElementById('auth-submit-btn');
+            btn.innerText = "⏳ 登录中..."; btn.disabled = true;
+
+            // 向 Bmob 发起登录请求
+            Bmob.User.login(u, p).then(res => {
+                btn.innerText = "登 录 账 号"; btn.disabled = false; // 解锁按钮
+                checkAuthState();
+            }).catch(err => {
+                alert("❌ 登录失败：账号或密码错误！");
+                btn.innerText = "登 录 账 号"; btn.disabled = false;
+            });
+        }
+
+        function handleActivate() {
+            const code = document.getElementById('auth-code').value.trim();
+            if (!code) return alert("请输入激活码！");
+
+            const btn = document.querySelector('#auth-activate-area button');
+            const originalText = btn.innerText;
+            btn.innerText = "⏳ 连线专属服务器验证中..."; btn.disabled = true;
+
+            // 🌟 核心魔法：跨海大桥！向我们刚建好的本地服务器发送请求
+            fetch('http://localhost:3000/api/verify-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: code }) // 把网页上填的激活码打包发给后端
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // ✅ 后端点头了：验证通过！
+                    // (保留这里的 Bmob 逻辑，因为验证通过后，还要给用户建一个存分数的空抽屉)
+                    const saveQuery = Bmob.Query("CloudSaveData");
+                    saveQuery.set("username", Bmob.User.current().username);
+                    saveQuery.set("appData", JSON.stringify(DEFAULT_STATE)); 
+                    saveQuery.save().then(saveRes => {
+                        alert("🎉 " + data.message); // 弹出后端传回来的成功提示
+                        checkAuthState(); 
+                    }).catch(err => { 
+                        alert("创建云端存档失败！"); 
+                        btn.innerText = originalText; btn.disabled = false; 
+                    });
+                } else {
+                    // ❌ 后端摇头了：假码或已被使用
+                    alert("❌ " + data.message); // 弹出后端传回来的失败原因
+                    btn.innerText = originalText; btn.disabled = false;
+                }
+            })
+            .catch(err => { 
+                console.error("连线失败:", err);
+                alert("连接专属服务器失败！请检查大管家（黑窗口）是否正在运行？"); 
+                btn.innerText = originalText; btn.disabled = false; 
+            });
+        }
+
+        function logoutAuth() {
+            if(confirm("确定要退出当前账号吗？退出后可使用其他账号登录。")) {
+                if (saveTimeout) clearTimeout(saveTimeout);
+
+                if (currentCloudDataId && Bmob.User.current()) {
+                    const logoutBtn = document.querySelector('button[title="注销当前设备授权"]');
+                    const originalText = logoutBtn ? logoutBtn.innerText : "🔒 注销";
+                    if (logoutBtn) logoutBtn.innerText = "⏳ 保存并退出...";
+
+                    const cloudState = JSON.parse(JSON.stringify(state));
+                    cloudState.history = []; 
+                    const fullClassesData = cloudState.classes;
+                    cloudState.classes = fullClassesData.map(c => ({ id: c.id, name: c.name, students: [], groups: [] }));
+
+                    const query = Bmob.Query('CloudSaveData');
+                    query.set('id', currentCloudDataId);
+                    query.set('appData', JSON.stringify(cloudState)); 
+                    
+                    const currentCls = fullClassesData.find(c => c.id === state.currentClassId);
+                    if (currentCls && cloudClassIdMap[currentCls.id]) {
+                        const updateQ = Bmob.Query('CloudClassData');
+                        updateQ.set('id', cloudClassIdMap[currentCls.id]);
+                        updateQ.set('classData', JSON.stringify(currentCls));
+                        updateQ.save();
+                    }
+
+                    query.save().then(() => {
+                        Bmob.User.logout(); 
+                        location.reload(); 
+                    }).catch(err => {
+                        const forceQuit = confirm("退出前最后一次数据同步失败了。\n\n点击【确定】强制退出。");
+                        if (forceQuit) { Bmob.User.logout(); location.reload(); }
+                        else { if (logoutBtn) logoutBtn.innerText = originalText; }
+                    });
+                } else {
+                    Bmob.User.logout();
+                    location.reload();
+                }
+            }
+        }
+        
+        function initMainApp() {
+            const savedTheme = localStorage.getItem('class-paradise-theme') || 'default';
+            setTheme(savedTheme);
+            renderAll();
+            renderAdoptionCenter();
+            initStageInputs();
+            const curClass = getCurrentClass();
+            if(curClass) document.getElementById('display-title').innerText = curClass.name;
+            if(!state.isRankOpen) toggleRankSidebar();
+            updateDisplayDate();
+        }
+
+        // ⚡️ 极速启动：不再等待网络和图片加载，瞬间完成云端授权验证！
+        checkAuthState();
+        function initStageInputs() {
+            const st = state.config.stages;
+            document.getElementById('stage-infant').value = st.infant;
+            document.getElementById('stage-teen').value = st.teen;
+            document.getElementById('stage-adult').value = st.adult;
+            document.getElementById('stage-elder').value = st.elder;
+            document.getElementById('rules-happiness-ratio').value = state.config.pointsPerHappiness;
+            if (state.currentSystemDate) {
+                document.getElementById('sys-year').value = state.currentSystemDate.y;
+                document.getElementById('sys-month').value = state.currentSystemDate.m;
+                document.getElementById('sys-day').value = state.currentSystemDate.d;
+            }
+            if (state.currentSemesterInfo) {
+                document.getElementById('sys-total-weeks').value = state.currentSemesterInfo.totalWeeks;
+                document.getElementById('sys-current-week').value = state.currentSemesterInfo.currentWeek;
+                document.getElementById('sys-day-of-week').value = state.currentSemesterInfo.dayOfWeek;
+            }
+        }
+
+        function updateSystemDate() {
+            pushHistory('修改系统日期');
+            state.currentSystemDate.y = parseInt(document.getElementById('sys-year').value);
+            state.currentSystemDate.m = parseInt(document.getElementById('sys-month').value);
+            state.currentSystemDate.d = parseInt(document.getElementById('sys-day').value);
+            state.currentSemesterInfo.totalWeeks = parseInt(document.getElementById('sys-total-weeks').value);
+            state.currentSemesterInfo.currentWeek = parseInt(document.getElementById('sys-current-week').value);
+            state.currentSemesterInfo.dayOfWeek = document.getElementById('sys-day-of-week').value;
+            saveStateToLocal();
+            renderRanking();
+            updateDisplayDate();
+        }
+
+        function updateDisplayDate() {
+            const d = state.currentSystemDate, s = state.currentSemesterInfo, display = document.getElementById('display-calendar-info');
+            if (display) display.innerText = `${d.y}年${d.m}月${d.d}日 | 第${s.currentWeek}周 ${s.dayOfWeek} (共${s.totalWeeks}周)`;
+        }
+
+        function toggleModal(id, show) {
+            const modal = document.getElementById(id);
+            if (show) {
+                modal.classList.add('modal-show');
+                if (id === 'admin-modal') renderAdminPanels();
+                if (id === 'rules-modal') renderRulesUI();
+                if (id === 'shop-modal') renderShopUI();
+                if (id === 'class-switcher-modal') renderQuickSwitcher();
+                if (id === 'batch-edit-modal') renderBatchEditUI();
+            } else modal.classList.remove('modal-show');
+        }
+
+        function toggleRankSidebar() {
+            const container = document.getElementById('sidebar-container');
+            state.isRankOpen = !state.isRankOpen;
+            if(state.isRankOpen) container.classList.remove('collapsed');
+            else container.classList.add('collapsed');
+            saveStateToLocal();
+        }
+
+        function switchAdminTab(t) {
+            ['class', 'member', 'group', 'pets', 'data'].forEach(p => {
+                const tab = document.getElementById('atab-' + p), panel = document.getElementById('apanel-' + p);
+                if(tab) tab.className = 'px-6 py-4 text-lg font-black text-slate-400 transition-all border-b-4 border-transparent whitespace-nowrap';
+                if(panel) panel.classList.add('hidden');
+            });
+            document.getElementById('atab-' + t).className = 'px-6 py-4 text-lg font-black tab-active-blue transition-all whitespace-nowrap';
+            document.getElementById('apanel-' + t).classList.remove('hidden');
+            if(t==='data') renderDataBoard();
+            if(t==='pets') renderStudentPetsAdmin();
+            renderAdminPanels();
+        }
+
+        function setViewMode(mode) { state.viewMode = mode; saveStateToLocal(); renderAll(); }
+
+        function renderAll() {
+            const grid = document.getElementById('paradise-grid'), empty = document.getElementById('empty-state'), cls = getCurrentClass();
+            if(!cls) return;
+            document.getElementById('total-class-points').innerText = cls.students.reduce((a, b) => a + Number(b.points || 0), 0);
+            if (!cls.students.length) { grid.classList.add('hidden'); empty.classList.remove('hidden'); renderRanking(); return; }
+            grid.classList.remove('hidden'); empty.classList.add('hidden');
+            if (state.viewMode === 'individual') {
+                grid.className = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4";
+                grid.innerHTML = cls.students.map(s => renderStudentCard(s)).join('');
+            } else {
+                if (!cls.groups.length) {
+                    grid.innerHTML = `<div class="flex flex-col items-center justify-center py-20 text-slate-300"><span class="text-6xl mb-4">🏠</span><p class="font-black text-xl text-indigo-900 font-heiti tracking-tight">请先分配战队小组</p></div>`;
+                    return;
+                }
+                grid.className = "space-y-8";
+                const gMap = {}; const unassigned = [];
+                cls.groups.forEach(g => gMap[g.id] = { name: g.name, students: [] });
+                cls.students.forEach(s => { if (s.groupId && gMap[s.groupId]) gMap[s.groupId].students.push(s); else unassigned.push(s); });
+                grid.innerHTML = cls.groups.map(gObj => {
+                    const g = gMap[gObj.id];
+                    return `<div class="bg-indigo-50/40 p-6 rounded-[1.5rem] border-2 border-dashed border-indigo-100"><div class="flex justify-between items-center mb-4 ml-2"><h4 class="text-lg font-black text-indigo-700 font-heiti">🤝 ${g.name} <span class="text-[10px] bg-white px-2 py-0.5 rounded-full ml-2 border border-indigo-100">${g.students.length} 人</span></h4>${state.isSelectionMode ? `<button onclick="selectGroupMembers(${gObj.id})" class="bg-indigo-600 text-white px-3 py-1 rounded-lg text-[10px] font-black hover:bg-indigo-700 transition-all shadow-sm">全选小组</button>` : ''}</div><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">${g.students.map(s => renderStudentCard(s)).join('')}</div></div>`;
+                }).join('') + (unassigned.length ? `<div class="p-6"><h4 class="text-slate-400 font-black text-base mb-4 ml-2 font-heiti uppercase tracking-widest">🧩 未归属成员</h4><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">${unassigned.map(s => renderStudentCard(s)).join('')}</div></div>` : '');
+            }
+            updateSelectionUI(); renderRanking();
+            if (document.getElementById('apanel-data') && !document.getElementById('apanel-data').classList.contains('hidden')) renderDataBoard();
+            document.getElementById('view-ind').className = state.viewMode === 'individual' ? 'w-full py-2.5 rounded-xl text-xs font-black bg-indigo-600 text-white shadow-md' : 'w-full py-2.5 rounded-xl text-xs font-black text-indigo-400 hover:bg-white';
+            document.getElementById('view-grp').className = state.viewMode === 'group' ? 'w-full py-2.5 rounded-xl text-xs font-black bg-indigo-600 text-white shadow-md' : 'w-full py-2.5 rounded-xl text-xs font-black text-indigo-400 hover:bg-white';
+        }
+
+        function renderStudentCard(s) {
+            const st = state.config.stages; 
+            const totalPts = Number(s.points) || 0;
+            // 核心：当前宠物的进度 = 历史总积分 - 领养这只宠物时的起跑线积分
+            const petPts = s.hasPet ? Math.max(0, totalPts - (Number(s.petStartPoints) || 0)) : 0;
+            const pts = petPts; 
+            const inf = Number(st.infant)||0, te = Number(st.teen)||0, ad = Number(st.adult)||0, el = Number(st.elder)||0;
+            
+            const t1 = inf;
+            const t2 = inf + te;
+            const t3 = inf + te + ad;
+            const t4 = inf + te + ad + el;
+
+            let minRange = 0, maxRange = t1, stageName = "🌱 幼年期";
+            if(s.lv === 2) { minRange = t1; maxRange = t2; stageName = "🌿 少年期"; } 
+            else if(s.lv === 3) { minRange = t2; maxRange = t3; stageName = "🌳 青年期"; } 
+            else if(s.lv === 4) { minRange = t3; maxRange = t4; stageName = "🏆 成熟期"; }
+            
+            const prog = maxRange > minRange ? Math.min(100, Math.max(0, ((pts - minRange) / (maxRange - minRange)) * 100)) : 100;
+            const isFullyGrown = s.lv === 4 && pts >= t4;
+            
+            let currentImage = null;
+            try { if (PET_EVOLUTION_MAP[s.color]) currentImage = PET_EVOLUTION_MAP[s.color][s.lv - 1]; } catch (e) { }
+            let finalStyle = (currentImage && !currentImage.includes("这里填")) ? `background-image: ${currentImage} !important; background-color: transparent !important;` : "";
+            
+            return `<div data-id="${s.id}" onclick="selectStudent(${s.id}, event)" class="student-card rounded-[1.5rem] p-4 border-4 flex flex-col items-center hover:translate-y-[-4px] transition-all relative group cursor-pointer h-full min-h-[280px] ${isFullyGrown ? 'gold-glow' : ''}">${state.isSelectionMode ? `<div class="absolute top-3 right-3 checkbox-custom ${state.selectedIds.includes(s.id) ? 'checked' : ''}"></div>` : ''}<div class="text-lg font-black mb-3 font-heiti text-center">${s.name}</div>${s.hasPet ? `<div class="w-28 h-28 ${s.color} rounded-[2rem] relative animate-float shadow-md mb-3 flex items-center justify-center border-4 border-white bg-cover bg-center bg-no-repeat" style="${finalStyle}"></div>` : `<div onclick="event.stopPropagation(); openPetSetup(${s.id})" class="w-28 h-28 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2rem] flex items-center justify-center text-slate-300 mb-3 transition-all hover:bg-slate-100"><span class="text-4xl font-light">+</span></div>`}<div class="w-full space-y-1 mt-auto text-center"><div class="text-sm font-black text-indigo-950 font-heiti truncate mt-1">${s.petName || '暂未孵化'}</div><div class="flex items-center justify-center gap-2"><div class="text-[10px] font-black bg-indigo-50 px-2 py-0.5 rounded-full">${stageName}</div><div class="text-[10px] font-black bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full">😊 开心 ${s.happiness || 0}</div></div>${isFullyGrown ? `<div class="mt-2 flex flex-col gap-2"><div class="text-[10px] text-amber-500 font-black animate-pulse">🌟 宠物已经满级啦！ 🌟</div><button onclick="event.stopPropagation(); finishPetJourney(${s.id})" class="btn-graduate w-full py-1.5 bg-amber-400 text-indigo-950 rounded-xl text-[11px] font-black border-b-4 border-amber-600 shadow-sm hover:scale-105 active:scale-95 transition-all">完成旅程 & 重新领养</button></div>` : `<div class="progress-bar-container mt-1"><div class="progress-bar-fill" style="width: ${prog}%"></div></div><div class="text-[10px] text-slate-400 font-bold mt-1">${Math.max(0, pts - minRange)} / ${maxRange - minRange}</div><div class="flex items-center justify-center gap-3 pt-2"><button onclick="event.stopPropagation(); updatePoints(${s.id}, -1)" class="btn-control">－</button><span class="text-base font-black font-heiti" title="终身总积分">${totalPts}</span><button onclick="event.stopPropagation(); updatePoints(${s.id}, 1)" class="btn-control">＋</button></div>`}</div></div>`;
+        }
+
+       function renderStudentPetsAdmin() {
+            const cls = getCurrentClass(), list = document.getElementById('m-pets-list');
+            if (!list) return;
+            if (!cls.students.length) { list.innerHTML = '<div class="py-10 text-center text-slate-300">暂无学生数据</div>'; return; }
+            const stagesNames = ["🌱 幼年期", "🌿 少年期", "🌳 青年期", "🏆 成熟期"];
+            list.innerHTML = cls.students.map(s => {
+                let petImgStyle = "";
+                if (s.hasPet && s.color) {
+                    let currentImage = null;
+                    try { if (PET_EVOLUTION_MAP[s.color]) currentImage = PET_EVOLUTION_MAP[s.color][s.lv - 1]; } catch (e) {}
+                    petImgStyle = (currentImage && !currentImage.includes("这里填")) ? `background-image: ${currentImage} !important; background-size: cover; background-position: center;` : "";
+                }
+                
+                const historyCount = s.petHistory ? s.petHistory.length : 0;
+                const historyHtml = historyCount > 0 
+                    ? `<button onclick="openPetHistoryModal(${s.id})" class="bg-amber-100 text-amber-700 border border-amber-200 px-4 py-3 rounded-xl text-sm font-black hover:bg-amber-200 hover:scale-[1.02] transition-all shadow-sm w-full flex justify-between items-center mt-1"><span>🏆 查看历届荣誉宠物</span><span class="bg-white px-2.5 py-1 rounded-full text-xs shadow-inner">${historyCount} 只</span></button>` 
+                    : `<div class="p-3 bg-slate-50 rounded-xl text-center border-2 border-dashed border-slate-200 text-xs text-slate-400 font-bold mt-1">暂无满级毕业的宠物</div>`;
+                
+                const curStage = stagesNames[s.lv-1] || "🐣 孵化中";
+                
+                // 计算当前宠物专属积分
+                const petPts = s.hasPet ? Math.max(0, (Number(s.points)||0) - (Number(s.petStartPoints)||0)) : 0;
+                
+                const inf = Number(state.config.stages.infant)||0, te = Number(state.config.stages.teen)||0, ad = Number(state.config.stages.adult)||0, el = Number(state.config.stages.elder)||0;
+                const t1 = inf;
+                const t2 = inf + te;
+                const t3 = inf + te + ad;
+                const t4 = inf + te + ad + el;
+
+                let minRange = 0, maxRange = t1;
+                if(s.lv === 2) { minRange = t1; maxRange = t2; }
+                else if(s.lv === 3) { minRange = t2; maxRange = t3; }
+                else if(s.lv === 4) { minRange = t3; maxRange = t4; }
+                
+                const progPct = maxRange > minRange ? Math.min(100, Math.max(0, ((petPts - minRange) / (maxRange - minRange)) * 100)) : 100;
+                const stagePoints = Math.max(0, petPts - minRange);
+                const stageGoal = maxRange - minRange;
+
+                return `<div class="bg-white p-6 rounded-2xl border-2 border-slate-100 shadow-sm flex flex-col gap-4"><div class="flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-black text-sm">${s.name[0]}</div><h5 class="font-black text-indigo-900 text-lg font-heiti">${s.name}</h5></div><div class="flex items-center gap-4 text-[10px] font-black uppercase text-slate-400"><div>开心值: <span class="text-amber-500">${s.happiness || 0}</span></div><div>终身总积分: <span class="text-indigo-500">${Number(s.points) || 0}</span></div></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="space-y-2"><span class="text-[10px] font-black text-indigo-300 uppercase block tracking-widest">当前领养进度</span>${s.hasPet ? `<div class="flex items-center gap-4 bg-indigo-50/50 p-4 rounded-xl border border-indigo-100"><div class="w-16 h-16 ${s.color} rounded-xl shadow-sm border-2 border-white animate-float bg-cover bg-center shrink-0" style="${petImgStyle}"></div><div class="flex-grow"><div class="flex justify-between items-end mb-1"><div class="text-lg font-black text-indigo-800 font-heiti">${s.petName}</div><div class="text-xs font-bold text-indigo-500 bg-indigo-100 px-2 py-0.5 rounded-full">${curStage} (Lv.${s.lv})</div></div><div class="w-full h-2.5 bg-indigo-100 rounded-full mt-2 overflow-hidden border border-indigo-200"><div class="h-full bg-indigo-500 transition-all" style="width: ${progPct}%"></div></div><div class="text-[10px] text-right mt-1.5 text-indigo-500 font-black">${stagePoints} / ${stageGoal}</div></div></div>` : `<div class="p-5 bg-slate-50 rounded-xl text-center border-2 border-dashed border-slate-200 text-sm text-slate-400 font-bold">🐣 待领养/孵化中</div>`}</div><div class="space-y-2"><span class="text-[10px] font-black text-slate-300 uppercase block tracking-widest">历届荣誉馆</span>${historyHtml}</div></div></div>`;
+            }).join('');
+        }
+
+        function renderDataBoard() {
+            const cls = getCurrentClass(), count = cls.students.length, dataList = document.getElementById('apanel-data-list');
+            if(!cls) return;
+            const topInd = count > 0 ? cls.students.reduce((p, c) => (Number(c.points||0) > Number(p.points||0) ? c : p), cls.students[0]) : { name: '无', points: 0 };
+            const avgInd = count ? (cls.students.reduce((a, b) => a + Number(b.points||0), 0) / count).toFixed(1) : '0.0';
+            const groupData = cls.groups.map(g => {
+                const members = cls.students.filter(s => s.groupId === g.id);
+                const total = members.reduce((a, b) => a + Number(b.points||0), 0);
+                const avg = members.length > 0 ? (total / members.length).toFixed(1) : '0.0';
+                return { ...g, total, avg, count: members.length };
+            });
+            const topGrp = groupData.length > 0 ? groupData.reduce((p, c) => (c.total > p.total ? c : p), groupData[0]) : { name: '无', total: 0 };
+            const avgGrpTotal = groupData.length > 0 ? (groupData.reduce((a, b) => a + b.total, 0) / groupData.length).toFixed(1) : '0.0';
+
+            document.getElementById('data-max-ind').innerHTML = `<p class="text-3xl font-black text-rose-600">${Number(topInd.points)||0}</p><span class="text-[10px] text-rose-400 font-bold">(${topInd.name})</span>`;
+            document.getElementById('data-avg-ind').innerText = avgInd;
+            document.getElementById('data-max-grp').innerHTML = `<p class="text-3xl font-black text-amber-600">${topGrp.total}</p><span class="text-[10px] text-amber-400 font-bold">(${topGrp.name})</span>`;
+            document.getElementById('data-avg-grp').innerText = avgGrpTotal;
+
+            if (dataList) {
+                dataList.innerHTML = `<div class="space-y-4"><h4 class="text-sm font-black text-indigo-900 flex items-center gap-2">📊 小组表现详细报表</h4><div class="bg-white rounded-2xl border-4 border-indigo-900 overflow-hidden shadow-sm"><table class="w-full text-left border-collapse"><thead class="bg-indigo-900 text-white text-[11px] font-black uppercase tracking-wider"><tr><th class="p-4">小组名称</th><th class="p-4">成员数</th><th class="p-4">总积分</th><th class="p-4">人均积分</th><th class="p-4">进化完成度</th></tr></thead><tbody class="text-xs font-bold text-slate-600">${groupData.map(g => {
+                    const adoptions = cls.students.filter(s => s.groupId === g.id && s.hasPet).length;
+                    const adoptRate = g.count > 0 ? ((adoptions / g.count) * 100).toFixed(0) : 0;
+                    return `<tr class="border-b border-slate-100 hover:bg-indigo-50/30 transition-colors"><td class="p-4 text-indigo-700 font-black">${g.name}</td><td class="p-4">${g.count} 人</td><td class="p-4 font-black">${g.total}</td><td class="p-4">${g.avg}</td><td class="p-4"><div class="flex items-center gap-2"><div class="w-12 h-2 bg-slate-100 rounded-full overflow-hidden border border-slate-200"><div class="h-full bg-emerald-400" style="width: ${adoptRate}%"></div></div><span>${adoptRate}%</span></div></td></tr>`;
+                }).join('') || '<tr><td colspan="5" class="p-10 text-center text-slate-300">尚未分配小组</td></tr>'}</tbody></table></div></div>`;
+            }
+        }
+
+        function finishPetJourney(id) {
+            const cls = getCurrentClass(), s = cls.students.find(st => st.id === id);
+            if (!s) return;
+            if (confirm(`确定要结束与【${s.petName}】的这段奇妙旅程吗？`)) {
+                pushHistory(`结束旅程: ${s.name}`);
+                if (!s.petHistory) s.petHistory = [];
+                // 毕业时只记录赚到的积分，【核心修改：去掉 color，只存 name，极限压缩体积】
+                const petPts = Math.max(0, (Number(s.points)||0) - (Number(s.petStartPoints)||0));
+                s.petHistory.push({ name: s.petName, points: petPts, date: new Date().toLocaleDateString() });
+                
+                // 【核心防御】：荣誉馆上限锁死在 9 只，多出来的自动挤掉最老的
+                if (s.petHistory.length > 9) {
+                    s.petHistory.shift(); 
+                }
+                
+                // 绝不清零 s.points，只把宠物的状态清空
+                s.lv = 1; 
+                s.hasPet = false; 
+                s.petName = ''; 
+                s.color = ''; 
+                s.celebratedMax = false;
+                
+                saveStateToLocal(); renderAll(); playCrispSound(); blossomFireworks();
+            }
+        }
+        function renderRanking() { 
+            const list = document.getElementById('ranking-list'), cls = getCurrentClass(); 
+            if(!cls) return; 
+            const dateLabel = document.getElementById('current-rank-date-label'), d = state.currentSystemDate, s = state.currentSemesterInfo;
+            let dateStr = state.rankLevel === 'day' ? `${d.y}年${d.m}月${d.d}日` : (state.rankLevel === 'week' ? `第${s.currentWeek}周` : (state.rankLevel === 'month' ? `${d.y}年${d.m}月` : "全部"));
+            dateLabel.innerText = `显示范围: ${dateStr}`;
+            
+            if (state.rankType === 'individual') { 
+                const sorted = [...cls.students].sort((a, b) => Number(b.points||0) - Number(a.points||0)); 
+                list.innerHTML = sorted.map((s, i) => `<div class="flex items-center justify-between p-2 px-3 rounded-xl bg-indigo-50/40 mb-1.5 border border-transparent hover:border-indigo-100 transition-all"><div class="flex items-center gap-3"><div class="w-7 h-7 rounded-lg ${i < 3 ? 'bg-amber-400 text-indigo-900' : 'bg-slate-200 text-slate-500'} flex items-center justify-center text-xs font-black">${i + 1}</div><div><div class="text-sm font-black leading-none mb-1.5">${s.name}</div><div class="text-xs font-bold opacity-70 leading-none">💎 ${Number(s.points)||0} | 😊 ${s.happiness || 0}</div></div></div></div>`).join('') || '<div class="py-10 text-center text-slate-300 text-sm">暂无学生</div>'; 
+            } else { 
+                const gStats = cls.groups.map(g => ({ ...g, total: cls.students.filter(s => s.groupId === g.id).reduce((a, b) => a + Number(b.points||0), 0) })).sort((a, b) => b.total - a.total); 
+                list.innerHTML = gStats.map((g, i) => `<div class="flex items-center justify-between p-2 px-3 rounded-xl bg-amber-50/40 mb-1.5 border border-transparent hover:border-amber-100"><div class="flex items-center gap-3"><div class="w-7 h-7 rounded-lg ${i < 3 ? 'bg-amber-400 text-indigo-900' : 'bg-slate-200 text-slate-500'} flex items-center justify-center text-xs font-black">${i + 1}</div><div class="text-sm font-black">${g.name}</div></div><span class="font-black text-sm text-amber-600">🔥 ${g.total}</span></div>`).join('') || '<div class="py-10 text-center text-slate-300 text-sm">暂无小组</div>'; 
+            } 
+        }
+
+        function toggleSelectionMode() { state.isSelectionMode = !state.isSelectionMode; state.selectedIds = []; renderAll(); const bar = document.getElementById('batch-action-bar'), btn = document.getElementById('toggle-select-mode'), all = document.getElementById('btn-select-all'); if(state.isSelectionMode) { bar.classList.add('active'); btn.innerText = "多选模式: 开"; btn.className = "w-full py-2.5 bg-indigo-600 text-white rounded-xl text-xs font-black shadow-lg"; all.classList.remove('hidden'); } else { bar.classList.remove('active'); btn.innerText = "多选模式: 关"; btn.className = "w-full py-2.5 bg-slate-100 text-slate-600 rounded-xl text-xs font-black border-2 border-slate-200"; all.classList.add('hidden'); } }
+        function selectStudent(id, e) { if (!state.isSelectionMode) return; if (state.selectedIds.includes(id)) state.selectedIds = state.selectedIds.filter(v => v !== id); else state.selectedIds.push(id); updateSelectionUI(); }
+        function updateSelectionUI() { document.querySelectorAll('.student-card').forEach(card => { const id = parseInt(card.dataset.id), check = card.querySelector('.checkbox-custom'); if (state.selectedIds.includes(id)) { check?.classList.add('checked'); card.classList.add('border-amber-400', 'bg-amber-50/30'); } else { check?.classList.remove('checked'); card.classList.remove('border-amber-400', 'bg-amber-50/30'); } }); document.getElementById('selected-count').innerText = state.selectedIds.length; }
+        function toggleSelectAll() { const cls = getCurrentClass(); state.selectedIds = (state.selectedIds.length === cls.students.length) ? [] : cls.students.map(s => s.id); updateSelectionUI(); }
+        function selectGroupMembers(groupId) {
+            const cls = getCurrentClass();
+            // 找出这个小组里的所有学生
+            const memberIds = cls.students.filter(s => s.groupId === groupId).map(s => s.id);
+            if (memberIds.length === 0) return;
+            
+            // 检查是不是该组的人已经全部被选中了
+            const allSelected = memberIds.every(id => state.selectedIds.includes(id));
+            
+            if (allSelected) {
+                // 如果已经全选了，再次点击就是“全不选”这个小组
+                state.selectedIds = state.selectedIds.filter(id => !memberIds.includes(id));
+            } else {
+                // 如果没有全选，就把这个小组的人都加进选中列表里（自动去重）
+                memberIds.forEach(id => {
+                    if (!state.selectedIds.includes(id)) state.selectedIds.push(id);
+                });
+            }
+            updateSelectionUI();
+        }
+        function openBatchEditModal() { if (!state.selectedIds.length) return alert('请先点选学生！'); toggleModal('batch-edit-modal', true); }
+        function renderBatchEditUI() { const list = document.getElementById('batch-edit-list'), cls = getCurrentClass(), selected = cls.students.filter(s => state.selectedIds.includes(s.id)); list.innerHTML = selected.map(s => `<div class="bg-slate-50 p-4 rounded-xl border-2 border-slate-100 flex items-center gap-4"><div class="flex flex-col gap-1 flex-grow text-xs"><label class="text-slate-400 font-black">姓名</label><input type="text" value="${s.name}" onchange="updateStudentField(${s.id}, 'name', this.value)" class="p-2 rounded-lg border-2 border-white outline-none"></div><div class="flex flex-col gap-1 flex-grow text-xs"><label class="text-slate-400 font-black">宠物</label><input type="text" value="${s.petName || ''}" placeholder="未孵化" onchange="updateStudentField(${s.id}, 'petName', this.value)" class="p-2 rounded-lg border-2 border-white outline-none"></div><div class="flex flex-col gap-1 flex-grow text-xs"><label class="text-slate-400 font-black">开心值</label><input type="number" value="${s.happiness || 0}" onchange="updateStudentField(${s.id}, 'happiness', parseInt(this.value))" class="p-2 rounded-lg border-2 border-white outline-none"></div><button onclick="deleteStudent(${s.id})" class="text-rose-300 hover:text-rose-500 text-xl">✕</button></div>`).join(''); }
+        function updateStudentField(id, field, value) { pushHistory(`修改成员: ${field}`); const s = getCurrentClass().students.find(st => st.id === id); if(s) { s[field] = value; saveStateToLocal(); renderAll(); } }
+        function deleteStudent(id) { if(confirm('确定移除？')) { pushHistory('移除成员'); const cls = getCurrentClass(); cls.students = cls.students.filter(s => s.id !== id); state.selectedIds = state.selectedIds.filter(sid => sid !== id); saveStateToLocal(); renderBatchEditUI(); renderAll(); if(state.selectedIds.length === 0) toggleModal('batch-edit-modal', false); } }
+        function openBatchRuleModal(type) { if (!state.selectedIds.length) return alert('请先点选学生！'); toggleModal('batch-rule-modal', true); const list = document.getElementById('batch-rules-list'), rules = state.config[type + 'Rules']; list.innerHTML = rules.map(r => `<button onclick="applyBatchRule('${type}', ${r.id})" class="w-full text-left p-3 rounded-lg border-2 border-slate-100 mb-1 flex justify-between items-center bg-white hover:border-indigo-300 transition-all"><span class="font-bold text-slate-700 text-xs">${r.name}</span><span class="font-black text-sm ${type==='reward'?'text-emerald-600':'text-rose-500'}">${type==='reward'?'+':'-'}${r.points}</span></button>`).join('') || '<p class="text-center py-4 text-slate-300 text-xs">无规则</p>'; }
+       function applyBatchRule(type, rId) { 
+            pushHistory('批量奖惩'); 
+            const rule = state.config[type + 'Rules'].find(r => r.id === rId);
+            if (!rule) return;
+            const amt = type === 'reward' ? rule.points : -rule.points; 
+            
+            // 1. 批量处理分数
+            const targets = [...state.selectedIds]; 
+            targets.forEach(id => { updatePoints(id, amt, true); }); 
+            saveStateToLocal(); 
+            
+            // 先关掉弹窗并更新界面
+            toggleModal('batch-rule-modal', false); 
+            renderAll(); 
+            
+            // 2. 如果是加分，播放全屏震撼特效
+            if (amt > 0) {
+                // 稍微等 150 毫秒，让弹窗的黑背景消失后再放特效，防止被遮挡
+                setTimeout(() => {
+                    playCrispSound(); 
+                    blossomFireworks();
+                    targets.forEach((id, index) => {
+                        setTimeout(() => {
+                            // 强制生成在最顶层的专属爱心
+                            const card = document.querySelector(`[data-id="${id}"]`); 
+                            if (card) { 
+                                const rect = card.getBoundingClientRect();
+                                const heart = document.createElement('div'); 
+                                heart.className = 'heart-float-el'; 
+                                heart.innerText = '❤️'; 
+                                heart.style.position = 'fixed';
+                                heart.style.zIndex = '99999'; // 穿透一切的绝对顶层
+                                heart.style.left = `${rect.left + rect.width / 2 - 20}px`;
+                                heart.style.top = `${rect.top + 20}px`;
+                                document.body.appendChild(heart); 
+                                setTimeout(() => heart.remove(), 1500); 
+                            }
+                        }, index * 80); // 像机关枪一样依次冒爱心，极度解压
+                    });
+                }, 150);
+            }
+            
+            // 3. 等特效飞一会儿后，自动优雅地退出多选模式，清理战场
+            setTimeout(() => {
+                state.isSelectionMode = false;
+                state.selectedIds = [];
+                const bar = document.getElementById('batch-action-bar'), btn = document.getElementById('toggle-select-mode'), all = document.getElementById('btn-select-all');
+                if (bar) bar.classList.remove('active'); 
+                if (btn) { btn.innerText = "多选模式: 关"; btn.className = "w-full py-2.5 bg-slate-100 text-slate-600 rounded-xl text-xs font-black border-2 border-slate-200"; }
+                if (all) all.classList.add('hidden');
+                renderAll(); 
+            }, 1000); 
+        }
+        
+        function updateLevel(s) { 
+            // 判定等级时，只看当前宠物赚到的积分，不看终身总分
+            const petPts = s.hasPet ? Math.max(0, (Number(s.points) || 0) - (Number(s.petStartPoints) || 0)) : 0;
+            const pts = petPts;
+            const st = state.config.stages; 
+            const inf = Number(st.infant)||0, te = Number(st.teen)||0, ad = Number(st.adult)||0, el = Number(st.elder)||0;
+            
+            const t1 = inf;
+            const t2 = inf + te;
+            const t3 = inf + te + ad;
+            const t4 = inf + te + ad + el;
+
+            let targetLv = 1;
+            if (pts >= t3) targetLv = 4;
+            else if (pts >= t2) targetLv = 3;
+            else if (pts >= t1) targetLv = 2;
+            
+            s.lv = targetLv;
+
+            if (s.lv === 4 && pts >= t4 && !s.celebratedMax) {
+                s.celebratedMax = true;
+                setTimeout(() => { playCrispSound(); blossomFireworks(); alert(`🎊 恭喜！【${s.name}】的宠物【${s.petName}】已满级！`); }, 300);
+            } else if (pts < t4) {
+                s.celebratedMax = false;
+            }
+        }
+        
+        function updatePoints(id, amt, silent = false) { 
+            const s = getCurrentClass().students.find(st => st.id === id); 
+            if(s) { 
+                if(!silent) pushHistory(`积分: ${s.name}`);
+                const oldPoints = Number(s.points) || 0; 
+                s.points = Math.max(0, oldPoints + amt); 
+                if (amt > 0 && !silent) { playCrispSound(); blossomFireworks(); showHeartAnimation(id); }
+                if (s.points > oldPoints) {
+                    const added = s.points - oldPoints, ratio = Number(state.config.pointsPerHappiness) || 10;
+                    s.pointBuffer = (Number(s.pointBuffer) || 0) + added;
+                    const happinessToAdd = Math.floor(s.pointBuffer / ratio);
+                    if (happinessToAdd > 0) { s.happiness = (Number(s.happiness) || 0) + happinessToAdd; s.pointBuffer %= ratio; }
+                }
+                updateLevel(s); 
+                if (!silent) { saveStateToLocal(); renderAll(); }
+            } 
+        }
+
+        function playCrispSound() { 
+            try { 
+                const AudioContext = window.AudioContext || window.webkitAudioContext, 
+                      audioCtx = new AudioContext(), 
+                      osc = audioCtx.createOscillator(), 
+                      gain = audioCtx.createGain(); 
+                osc.connect(gain); 
+                gain.connect(audioCtx.destination); 
+                osc.type = 'square'; 
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime); 
+                osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.1); 
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime); 
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4); 
+                osc.start(); 
+                osc.stop(audioCtx.currentTime + 0.4); 
+            } catch(e) {} 
+        }
+        let fireworkThrottle = false;
+        function blossomFireworks() { 
+            if (fireworkThrottle) return; // 节流阀：防止狂点导致浏览器卡死
+            fireworkThrottle = true;
+            setTimeout(() => fireworkThrottle = false, 500); // 0.5秒内只能炸一次全屏烟花
+
+            const colors = ['#FFD700', '#FF1493', '#00BFFF', '#32CD32', '#FF4500', '#F0E68C', '#FF00FF']; 
+            const count = 30; // 使用纯 CSS 硬件加速动画，30个粒子就能达到完美效果
+            const frag = document.createDocumentFragment(); 
+            const startX = 30 + Math.random() * 40; 
+            const startY = 20 + Math.random() * 30; 
+
+            for (let i = 0; i < count; i++) { 
+                const p = document.createElement('div'); 
+                p.className = 'firework-p'; 
+                const c = colors[Math.floor(Math.random() * colors.length)];
+                
+                const angle = Math.random() * Math.PI * 2; 
+                const velocity = 60 + Math.random() * 150; 
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity + 80; 
+                
+                p.style.cssText = `left: ${startX}%; top: ${startY}%; background-color: ${c}; box-shadow: 0 0 10px ${c}; --tw-x: ${tx}px; --tw-y: ${ty}px;`;
+                frag.appendChild(p); 
+            } 
+            document.body.appendChild(frag); 
+            setTimeout(() => { document.querySelectorAll('.firework-p').forEach(el => el.remove()); }, 1200);
+        }
+            
+        function showHeartAnimation(studentId) { 
+            const card = document.querySelector(`[data-id="${studentId}"]`); 
+            if (card) { 
+                const rect = card.getBoundingClientRect();
+                const heart = document.createElement('div'); 
+                heart.className = 'heart-float-el'; 
+                heart.innerText = '❤️'; 
+                // 核心修复：将爱心悬浮在屏幕最顶层，防止被快速的界面刷新吃掉
+                heart.style.position = 'fixed';
+                heart.style.left = `${rect.left + rect.width / 2 - 20}px`;
+                heart.style.top = `${rect.top + 20}px`;
+                document.body.appendChild(heart); 
+                setTimeout(() => heart.remove(), 1500); 
+            } 
+        }
+
+        // 废弃旧的即时触发
+        // function updateHappinessRatio(val) { ... }
+        // function updateStage(key, val) { ... }
+        
+        // ================= 🌟 统一配置保存引擎 🌟 =================
+        function saveAllRulesAndStages() {
+            pushHistory('保存全套规则');
+            
+            // 1. 获取并保存四个成长阶段的阈值
+            const inf = Number(document.getElementById('stage-infant').value) || 0;
+            const te = Number(document.getElementById('stage-teen').value) || 0;
+            const ad = Number(document.getElementById('stage-adult').value) || 0;
+            const el = Number(document.getElementById('stage-elder').value) || 0;
+            state.config.stages = { infant: inf, teen: te, adult: ad, elder: el };
+            
+            // 2. 获取并保存开心值比例
+            const ratio = Number(document.getElementById('rules-happiness-ratio').value) || 10;
+            state.config.pointsPerHappiness = Math.max(1, ratio); // 防止除0或负数
+            
+            // 3. 所有输入框的规则已经在失焦时实时记录在 state 里了，所以不需要在这里单独取一遍
+            // 但是我们要执行终极的判定：重新计算所有人的等级！
+            
+            const cls = getCurrentClass();
+            if (cls && cls.students) {
+                cls.students.forEach(s => updateLevel(s)); 
+            }
+            
+            // 4. 发射给云端 + 本地存档
+            saveStateToLocal();
+            
+            // 5. 刷新界面 + 视觉特效
+            renderAll();
+            playCrispSound();
+            
+            // 6. 给个提示然后关掉弹窗
+            alert('✅ 规则配置已成功保存并同步云端！\n所有学生卡片的成长条已更新。');
+            toggleModal('rules-modal', false);
+        }
+        function setRankLevel(l) { state.rankLevel = l; saveStateToLocal(); ['all', 'month', 'week', 'day'].forEach(id => { const b = document.getElementById('rl-' + id); if (b) b.className = (id === l) ? "flex-grow py-1.5 text-[10px] font-black bg-amber-400 text-indigo-900 rounded-lg shadow-sm" : "flex-grow py-1.5 text-[10px] font-black text-indigo-300 hover:text-white"; }); renderRanking(); }
+        function setRankType(t) { state.rankType = t; saveStateToLocal(); const bInd = document.getElementById('rank-type-ind'), bGrp = document.getElementById('rank-type-grp'); if (t === 'individual') { bInd.className = "flex-grow py-2 text-[11px] font-black bg-indigo-500 text-white rounded-lg border-b-4 border-indigo-700"; bGrp.className = "flex-grow py-2 text-[11px] font-black bg-indigo-900 text-indigo-300 rounded-lg hover:bg-indigo-800"; } else { bGrp.className = "flex-grow py-2 text-[11px] font-black bg-indigo-500 text-white rounded-lg border-b-4 border-indigo-700"; bInd.className = "flex-grow py-2 text-[11px] font-black bg-indigo-900 text-indigo-300 rounded-lg hover:bg-indigo-800"; } renderRanking(); }
+        function createNewClass() { const inp = document.getElementById('new-class-input'), name = inp.value.trim(); if (!name) return; pushHistory('班级'); const id = Date.now(); state.classes.push({ id, name, students: [], groups: [] }); inp.value = ''; saveStateToLocal(); renderAdminPanels(); switchClass(id); }
+        function switchClass(id) { state.currentClassId = id; document.getElementById('display-title').innerText = getCurrentClass().name; saveStateToLocal(); renderAll(); renderAdminPanels(); toggleModal('class-switcher-modal', false); updateDisplayDate(); }
+        function mAddStudent() { const inp = document.getElementById('m-owner'), name = inp.value.trim(); if (!name) return; pushHistory('成员'); getCurrentClass().students.push({ id: Date.now(), name, points: 0, happiness: 0, pointBuffer: 0, lv: 1, hasPet: false, groupId: null, petHistory: [], celebratedMax: false }); inp.value = ''; saveStateToLocal(); renderAdminPanels(); renderAll(); }
+        function mBatchAddStudents() { const textarea = document.getElementById('m-batch-names'), rawText = textarea.value.trim(); if (!rawText) return; const names = rawText.split(/[\s,，、\n]+/).filter(n => n.length > 0); pushHistory('批量成员'); const cls = getCurrentClass(); names.forEach((name, idx) => { cls.students.push({ id: Date.now() + idx, name, points: 0, happiness: 0, pointBuffer: 0, lv: 1, hasPet: false, groupId: null, petHistory: [], celebratedMax: false }); }); textarea.value = ''; saveStateToLocal(); renderAdminPanels(); renderAll(); }
+        function mAddGroup() { const inp = document.getElementById('m-group-name'), name = inp.value.trim(); if (!name) return; pushHistory('小组'); getCurrentClass().groups.push({ id: Date.now(), name }); inp.value = ''; saveStateToLocal(); renderAdminPanels(); renderAll(); }
+        
+        function renderAdminPanels() {
+            const cls = getCurrentClass();
+            document.getElementById('class-list-admin').innerHTML = state.classes.map(c => `
+                <div class="flex justify-between items-center p-4 rounded-xl border-2 shadow-sm transition-all ${c.id === state.currentClassId ? 'bg-indigo-600 text-white border-indigo-800' : 'bg-white border-slate-100 hover:border-indigo-200'}">
+                    <span onclick="switchClass(${c.id})" class="font-black text-base font-heiti flex-grow cursor-pointer">${c.name}</span>
+                    <div class="flex gap-2 ml-2">
+                        <button onclick="event.stopPropagation(); editClass(${c.id})" class="text-[10px] ${c.id === state.currentClassId ? 'bg-indigo-500 hover:bg-indigo-400 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-600'} px-2 py-1 rounded">✏️</button>
+                        <button onclick="event.stopPropagation(); deleteClass(${c.id})" class="text-[10px] bg-rose-500 hover:bg-rose-600 text-white px-2 py-1 rounded">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('m-student-list').innerHTML = cls.students.map(s => `
+                <div class="bg-slate-50 p-3 rounded-xl flex items-center justify-between group border border-slate-100 shadow-sm">
+                    <span class="text-sm font-black text-slate-700 truncate mr-2" title="${s.name}">${s.name}</span>
+                    <div class="flex gap-2 opacity-0 group-hover:opacity-100">
+                        <button onclick="editMember(${s.id})" class="text-indigo-500 hover:text-indigo-700 text-sm px-1">✏️</button>
+                        <button onclick="deleteMember(${s.id})" class="text-rose-400 hover:text-rose-600 text-sm px-1">✕</button>
+                    </div>
+                </div>
+            `).join('') || '<div class="col-span-full py-10 text-center text-slate-300 text-sm">未录入</div>';
+
+            renderGroupAdminList();
+        }
+
+        function renderGroupAdminList() {
+            const cls = getCurrentClass(), list = document.getElementById('m-group-list');
+            if(!list) return;
+            list.innerHTML = cls.groups.map(g => {
+                const members = cls.students.filter(s => s.groupId === g.id), cand = cls.students.filter(s => s.groupId === null);
+                return `
+                <div class="p-4 bg-white rounded-2xl border-2 border-slate-100 shadow-sm flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center gap-2">
+                            <h5 class="font-black text-indigo-700 text-base font-heiti">${g.name}</h5>
+                            <button onclick="editGroup(${g.id})" class="text-[10px] text-slate-400 hover:text-indigo-600">✏️</button>
+                            <button onclick="deleteGroup(${g.id})" class="text-[10px] text-slate-400 hover:text-rose-500">🗑️</button>
+                        </div>
+                        <span class="text-[10px] bg-indigo-50 text-indigo-500 px-2 py-0.5 rounded-full">${members.length} 人</span>
+                    </div>
+                    <div class="space-y-1 mb-3">
+                        ${members.map(m => `<div class="flex justify-between items-center bg-slate-50 p-1.5 px-3 rounded-lg text-xs font-bold border border-transparent"><span>${m.name}</span><button onclick="toggleGroupMember(${g.id}, ${m.id})">✕</button></div>`).join('') || '<p class="text-[10px] text-slate-300 text-center py-4">无成员</p>'}
+                    </div>
+                    <select onchange="if(this.value) toggleGroupMember(${g.id}, parseInt(this.value))" class="mt-auto p-2 bg-indigo-50 rounded-lg text-xs font-black outline-none border-2 border-indigo-100">
+                        <option value="">+ 添加</option>
+                        ${cand.map(u => `<option value="${u.id}">${u.name}</option>`).join('')}
+                    </select>
+                </div>`;
+            }).join('');
+        }
+
+        function toggleGroupMember(gId, sId) { pushHistory('小组员'); const s = getCurrentClass().students.find(st => st.id === sId); if(s) { s.groupId = (s.groupId === gId) ? null : gId; saveStateToLocal(); renderGroupAdminList(); renderAll(); } }
+        function renderQuickSwitcher() { const list = document.getElementById('quick-class-list'); list.innerHTML = state.classes.map(c => `<div onclick="switchClass(${c.id})" class="p-4 rounded-xl border-2 cursor-pointer shadow-sm ${c.id === state.currentClassId ? 'bg-indigo-600 text-white border-indigo-800' : 'bg-white border-slate-50'}"><span class="font-black text-base font-heiti">${c.name}</span></div>`).join(''); }
+        function renderAdoptionCenter() { const list = document.getElementById('adoption-list'); list.innerHTML = PET_DATABASE.map((p, i) => `<div onclick="showAdoptionDetail(${i})" class="p-4 bg-white rounded-2xl border-2 border-slate-100 hover:border-amber-400 cursor-pointer flex flex-col items-center gap-2 group transition-all"><div class="w-12 h-12 ${p.color} rounded-xl shadow-md border-2 border-white group-hover:scale-110 bg-contain bg-no-repeat bg-center"></div><span class="text-xs font-black font-heiti text-indigo-900">${p.name}</span></div>`).join(''); }        
+        function showAdoptionDetail(i) { const p = PET_DATABASE[i]; document.getElementById('adoption-detail').innerHTML = `<div class="flex flex-col items-center justify-center text-center w-full h-full p-6"><div class="w-56 h-56 md:w-64 md:h-64 ${p.color} rounded-[3rem] shadow-2xl border-8 border-white animate-float bg-contain bg-no-repeat bg-center mb-8"></div><div class="flex flex-col items-center"><h3 class="text-3xl md:text-4xl font-black mb-4 font-heiti text-indigo-900 drop-shadow-sm">${p.name}</h3><p class="text-base md:text-lg font-bold text-slate-500 leading-relaxed max-w-sm px-4">${p.desc}</p></div></div>`; }
+        function openPetSetup(id) { state.currentStudentIdForPet = id; toggleModal('pet-setup-modal', true); renderPetSelectionOptions(); setPetSetupByIndex(0); }
+        function renderPetSelectionOptions() { const container = document.getElementById('pet-selection-options'); container.innerHTML = PET_DATABASE.map((pet, idx) => `<div onclick="setPetSetupByIndex(${idx})" class="pet-option-item flex flex-col items-center gap-1 p-2 border-2 border-slate-100 rounded-xl cursor-pointer hover:border-indigo-300" data-index="${idx}"><div class="w-10 h-10 ${pet.color} rounded-lg shadow-sm border border-white bg-contain bg-no-repeat bg-center"></div><span class="text-[10px] font-black text-slate-500">${pet.name}</span></div>`).join(''); }
+        function setPetSetupByIndex(index) { state.selectedPetIndex = index; const pet = PET_DATABASE[index], preview = document.getElementById('pet-setup-preview'); preview.className = `w-28 h-28 rounded-[2rem] ${pet.color} relative animate-float mb-6 shadow-xl border-4 border-white bg-contain bg-no-repeat bg-center`; document.querySelectorAll('.pet-option-item').forEach(opt => { opt.className = parseInt(opt.dataset.index) === index ? 'pet-option-item flex flex-col items-center gap-1 p-2 border-2 rounded-xl pet-option-selected' : 'pet-option-item flex flex-col items-center gap-1 p-2 border-2 border-slate-100 rounded-xl'; }); }
+        function savePetSetup() { 
+            const inp = document.getElementById('pet-setup-name'), name = inp.value.trim(), s = getCurrentClass().students.find(st => st.id === state.currentStudentIdForPet); 
+            if(!name) return alert("起个名字吧！"); 
+            if(s) { 
+                pushHistory('孵化'); 
+                const pet = PET_DATABASE[state.selectedPetIndex]; 
+                s.petName = name; 
+                s.color = pet.color; 
+                s.hasPet = true; 
+                s.celebratedMax = false; 
+                
+                // 【绝版修复】：给新宠物画上起跑线！
+                s.petStartPoints = Number(s.points) || 0; 
+                
+                toggleModal('pet-setup-modal', false); 
+                inp.value = ''; 
+                saveStateToLocal(); renderAll(); 
+            } 
+        }
+        // ================= 新增：一键随机分配宠物功能 =================
+        // ================= 新增：多选模式下的精准盲盒孵化 =================
+        function batchRandomAssignPets() {
+            if (!state.selectedIds || state.selectedIds.length === 0) {
+                return alert("请先勾选需要分配宠物的学生！");
+            }
+
+            const cls = getCurrentClass();
+            // 核心逻辑：只筛选出“你打勾了的”且“目前还没宠物”的学生
+            const unassignedStudents = cls.students.filter(s => state.selectedIds.includes(s.id) && !s.hasPet);
+            
+            if (unassignedStudents.length === 0) {
+                return alert("🎉 您勾选的学生都已经有宠物啦，无需重复分配！");
+            }
+            
+            if (confirm(`确定要为选中的 ${unassignedStudents.length} 名还没宠物的学生，随机盲盒分配宠物吗？`)) {
+                pushHistory('批量随机分配宠物');
+                
+                unassignedStudents.forEach(s => {
+                    const randomIdx = Math.floor(Math.random() * PET_DATABASE.length);
+                    const pet = PET_DATABASE[randomIdx];
+                    
+                    s.petName = pet.name; 
+                    s.color = pet.color;
+                    s.hasPet = true;
+                    s.celebratedMax = false;
+                    s.petStartPoints = Number(s.points) || 0; 
+                });
+                
+                saveStateToLocal();
+                
+                // 播放特效
+                playCrispSound();
+                blossomFireworks();
+                
+                // 延迟一秒优雅退出多选模式，清理界面
+                setTimeout(() => {
+                    state.isSelectionMode = false;
+                    state.selectedIds = [];
+                    const bar = document.getElementById('batch-action-bar'), btn = document.getElementById('toggle-select-mode'), all = document.getElementById('btn-select-all');
+                    if (bar) bar.classList.remove('active'); 
+                    if (btn) { btn.innerText = "多选模式: 关"; btn.className = "w-full py-2.5 bg-slate-100 text-slate-600 rounded-xl text-xs font-black border-2 border-slate-200"; }
+                    if (all) all.classList.add('hidden');
+                    renderAll(); 
+                    renderAdminPanels();
+                }, 1000);
+
+                alert(`✅ 盲盒开启成功！已为 ${unassignedStudents.length} 名学生送上了随机小宠物！`);
+            }
+        }
+        function renderRulesUI() { const reward = document.getElementById('reward-rules-container'), punish = document.getElementById('punish-rules-container'); const r = (type) => state.config[type + 'Rules'].map(item => `<div class="flex items-center gap-3 bg-white p-2 px-3 rounded-lg border-2 border-slate-50"><input type="text" value="${item.name}" onchange="updateRule('${type}', ${item.id}, 'name', this.value)" class="flex-grow text-xs font-black outline-none"><input type="number" value="${item.points}" onchange="updateRule('${type}', ${item.id}, 'points', parseInt(this.value))" class="w-10 text-center text-xs font-black outline-none bg-slate-50 rounded p-1"><button onclick="removeRule('${type}', ${item.id})" class="text-slate-300 hover:text-rose-500 text-xl">✕</button></div>`).join(''); reward.innerHTML = r('reward'); punish.innerHTML = r('punish'); }
+        function addRuleItem(t) { pushHistory('加规'); state.config[t + 'Rules'].push({ id: Date.now(), name: '新规则', points: 5 }); saveStateToLocal(); renderRulesUI(); }
+        function updateRule(t, id, k, v) { pushHistory('改规'); const item = state.config[t + 'Rules'].find(r => r.id === id); if(item) { item[k] = v; saveStateToLocal(); } }
+        function removeRule(t, id) { pushHistory('删规'); state.config[t + 'Rules'] = state.config[t + 'Rules'].filter(r => r.id !== id); saveStateToLocal(); renderRulesUI(); }
+        function switchShopTab(t) { state.shopTab = t; renderShopUI(); }
+        function renderShopUI() { const cls = getCurrentClass(), select = document.getElementById('shop-student-select'), pointsD = document.getElementById('shop-student-points'), grid = document.getElementById('shop-product-grid'); if(!state.selectedShopStudentId && cls.students.length) state.selectedShopStudentId = cls.students[0].id; select.innerHTML = cls.students.map(s => `<option value="${s.id}" ${s.id === state.selectedShopStudentId ? 'selected' : ''}>${s.name}</option>`).join('') || '<option value="">无学生</option>'; const stud = cls.students.find(s => s.id === state.selectedShopStudentId); pointsD.innerText = stud ? `😊 ${stud.happiness || 0}` : '😊 0'; grid.innerHTML = state.shopProducts.filter(p => p.type !== 'pet').map(p => `<div class="bg-white p-4 rounded-2xl border-2 border-slate-50 shadow-sm flex flex-col items-center gap-2 hover:border-amber-400 relative group"><div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100"><button onclick="prepareEditShopProduct(${p.id})" class="text-[10px]">✏️</button><button onclick="removeShopProduct(${p.id})" class="text-[10px]">🗑️</button></div><div class="text-4xl mb-1">${p.icon}</div><span class="font-black text-sm text-slate-800">${p.name}</span><div class="flex gap-2"><span class="text-amber-600 font-black text-[10px] bg-amber-50 px-2 py-0.5 rounded-full">😊 ${p.points}</span>${p.growth > 0 ? `<span class="text-emerald-600 font-black text-[10px] bg-emerald-50 px-2 py-0.5 rounded-full">✨ +${p.growth}</span>` : ''}</div><button onclick="redeemProduct(${p.id})" class="w-full mt-2 py-2.5 rounded-xl font-black text-xs ${stud && (stud.happiness || 0) >= p.points ? 'bg-amber-400 text-indigo-900 border-b-4 border-amber-600' : 'bg-slate-100 text-slate-300 cursor-not-allowed'}">兑换</button></div>`).join('') || '<div class="col-span-2 py-10 text-center text-slate-300 text-xs">暂无商品</div>'; }
+        function prepareEditShopProduct(id) { const p = state.shopProducts.find(item => item.id === id); if (!p) return; editingShopProductId = id; document.getElementById('shop-new-name').value = p.name; document.getElementById('shop-new-points').value = p.points; document.getElementById('shop-new-growth').value = p.growth; document.getElementById('shop-new-icon').value = p.icon; const btn = document.querySelector('[onclick="addNewShopProduct()"]'); if (btn) btn.innerText = "更新"; }
+        function removeShopProduct(id) { if (confirm("确定下架？")) { pushHistory('下架'); state.shopProducts = state.shopProducts.filter(p => p.id !== id); saveStateToLocal(); renderShopUI(); } }
+        function addNewShopProduct() { const name = document.getElementById('shop-new-name').value.trim(), pts = parseInt(document.getElementById('shop-new-points').value), icon = document.getElementById('shop-new-icon').value, growth = parseInt(document.getElementById('shop-new-growth').value) || 0; if(name && !isNaN(pts)) { pushHistory('商城'); if (editingShopProductId) { const p = state.shopProducts.find(item => item.id === editingShopProductId); if (p) { p.name = name; p.points = pts; p.icon = icon; p.growth = growth; } editingShopProductId = null; const btn = document.querySelector('[onclick="addNewShopProduct()"]'); if (btn) btn.innerText = "进货"; } else { state.shopProducts.push({ id: Date.now(), name, points: pts, icon, growth, type: 'self' }); } saveStateToLocal(); renderShopUI(); document.getElementById('shop-new-name').value = ''; document.getElementById('shop-new-points').value = ''; document.getElementById('shop-new-growth').value = '0'; } }
+        function redeemProduct(id) { const stud = getCurrentClass().students.find(s => s.id === state.selectedShopStudentId), prod = state.shopProducts.find(p => p.id === id); if(stud && prod && (stud.happiness || 0) >= prod.points) { pushHistory('兑换'); stud.happiness -= prod.points; if (prod.growth > 0) updatePoints(stud.id, prod.growth, false); saveStateToLocal(); renderAll(); renderShopUI(); } }
+        function exportData() { const blob = new Blob([JSON.stringify(state, null, 2)], {type : 'application/json'}), url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = `backup.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); }
+        function importData(input) { const file = input.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = (e) => { try { pushHistory('导案'); state = JSON.parse(e.target.result); saveStateToLocal(); renderAll(); renderAdminPanels(); initStageInputs(); alert("导入成功！"); } catch (err) { alert("失败"); } }; reader.readAsText(file); }
+        function clearAllData() { if(confirm("确定清空？")) { pushHistory('清空'); state = JSON.parse(JSON.stringify(DEFAULT_STATE)); saveStateToLocal(); renderAll(); renderAdminPanels(); initStageInputs(); } }
+
+        function editClass(id) {
+            const c = state.classes.find(cls => cls.id === id);
+            if(!c) return;
+            const newName = prompt("修改班级名称:", c.name);
+            if(newName && newName.trim()) {
+                pushHistory('编辑班级');
+                c.name = newName.trim();
+                saveStateToLocal();
+                renderAdminPanels();
+                if(state.currentClassId === id) document.getElementById('display-title').innerText = c.name;
+                renderQuickSwitcher();
+            }
+        }
+
+        function deleteClass(id) {
+            if(state.classes.length <= 1) return alert("至少保留一个班级！");
+            if(confirm("确定要删除这个班级及其所有数据吗？")) {
+                pushHistory('删除班级');
+                state.classes = state.classes.filter(c => c.id !== id);
+                if(state.currentClassId === id) {
+                    switchClass(state.classes[0].id);
+                } else {
+                    saveStateToLocal();
+                    renderAdminPanels();
+                    renderQuickSwitcher();
+                }
+            }
+        }
+
+        function editMember(id) {
+            const cls = getCurrentClass();
+            const s = cls.students.find(st => st.id === id);
+            if(!s) return;
+            const newName = prompt("修改成员名称:", s.name);
+            if(newName && newName.trim()) {
+                pushHistory('编辑成员');
+                s.name = newName.trim();
+                saveStateToLocal();
+                renderAdminPanels();
+                renderAll();
+            }
+        }
+
+        function deleteMember(id) {
+            if(confirm("确定要移除该成员吗？")) {
+                pushHistory('删成员');
+                const cls = getCurrentClass();
+                cls.students = cls.students.filter(s => s.id !== id);
+                state.selectedIds = state.selectedIds.filter(sid => sid !== id);
+                saveStateToLocal();
+                renderAdminPanels();
+                renderAll();
+            }
+        }
+
+        function editGroup(id) {
+            const cls = getCurrentClass();
+            const g = cls.groups.find(grp => grp.id === id);
+            if(!g) return;
+            const newName = prompt("修改小组名称:", g.name);
+            if(newName && newName.trim()) {
+                pushHistory('编辑小组');
+                g.name = newName.trim();
+                saveStateToLocal();
+                renderAdminPanels();
+                renderAll();
+            }
+        }
+
+        function deleteGroup(id) {
+            if(confirm("确定要删除这个小组吗？组内成员将变为未分配状态。")) {
+                pushHistory('删除小组');
+                const cls = getCurrentClass();
+                cls.groups = cls.groups.filter(g => g.id !== id);
+                cls.students.forEach(s => { if(s.groupId === id) s.groupId = null; });
+                saveStateToLocal();
+                renderAdminPanels();
+                renderAll();
+            }
+        }
+        function openPetHistoryModal(id) {
+            const cls = getCurrentClass(), s = cls.students.find(st => st.id === id);
+            if (!s || !s.petHistory || s.petHistory.length === 0) return;
+            
+            document.getElementById('pet-history-title').innerText = `🏆 ${s.name} 的历届宠物`;
+            
+            const list = document.getElementById('pet-history-list');
+            list.innerHTML = s.petHistory.map((h, i) => {
+                // 【动态匹配】：拿存好的极短的 h.name，去本地图鉴库里找长长的图片链接
+                const petInfo = PET_DATABASE.find(p => p.name === h.name);
+                const displayColor = petInfo ? petInfo.color : "bg-slate-200";
+
+                return `
+                <div class="bg-white p-4 rounded-2xl border-2 border-slate-100 shadow-sm flex flex-col items-center text-center hover:border-amber-300 transition-all">
+                    <div class="w-16 h-16 ${displayColor} rounded-xl shadow-inner border-2 border-slate-100 mb-3 bg-cover bg-center"></div>
+                    <span class="font-black text-indigo-900 text-base mb-1 font-heiti">${h.name}</span>
+                    <span class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full font-bold mb-1">⭐ 最终积分: ${h.points}</span>
+                    <span class="text-[9px] text-slate-400 font-bold">${h.date} 毕业</span>
+                </div>
+                `;
+            }).join('');
+            
+            toggleModal('pet-history-modal', true);
+        }
+    </script>
+</body>
+</html>
