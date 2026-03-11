@@ -1572,8 +1572,14 @@
             const curClass = getCurrentClass();
             if(curClass) document.getElementById('display-title').innerText = curClass.name;
             
+            // 🚀 终极杀手锏：无视云端历史记忆，无视任何设备
+            // 只要一进页面，强制把状态设为 false，并直接操作底层 DOM 把弹窗关死！
+            // 绝对不再用 toggle 函数，防止它瞎反转！
             state.isRankOpen = false;
-            document.getElementById('sidebar-container').classList.add('collapsed');
+            const rankContainer = document.getElementById('sidebar-container');
+            if (rankContainer) {
+                rankContainer.classList.add('collapsed');
+            }
             
             updateDisplayDate();
         }
