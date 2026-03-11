@@ -516,86 +516,40 @@
             80% { opacity: 1; transform: translate(-50%, -50%) scale(1); text-shadow: 0 0 30px #fbbf24; }
             100% { opacity: 0; transform: translate(-50%, -100%) scale(0.8); filter: blur(5px); }
         }
-    /* ================= 📱 纯手机端专属修复（绝对不影响电脑和平板） ================= */
+    /* ================= 📱 纯手机端终极修复（宽度<=767px，绝不影响电脑和平板） ================= */
         @media (max-width: 767px) {
-            /* 1. 彻底解除页面的高度封印，让底下的卡片能滑下去 */
-            body, html {
-                height: auto !important;
-                min-height: 100vh !important;
-                overflow-y: auto !important;
-                overflow-x: hidden !important;
-            }
-            .flex-grow.gap-4.overflow-hidden {
-                overflow: visible !important;
-                height: auto !important;
-            }
+            /* 1. 解除高度封印，让底部的卡片能划下去 */
+            body, html { height: auto !important; min-height: 100vh !important; overflow-y: auto !important; overflow-x: hidden !important; }
+            .flex-grow.gap-4.overflow-hidden { overflow: visible !important; height: auto !important; }
+            .center-content { height: auto !important; overflow: visible !important; }
 
-            /* 2. 把左侧控制台压扁成一行横向滑动的胶囊栏，释放屏幕高度 */
-            .sidebar-left {
-                width: 100% !important;
-                flex-direction: row !important;
-                flex-wrap: nowrap !important;
-                overflow-x: auto !important;
-                overflow-y: hidden !important;
-                padding: 0.5rem !important;
-                background: var(--card-bg) !important;
-                border: 3px solid var(--border-color) !important;
-                border-radius: 1rem !important;
-                align-items: center !important;
-                gap: 0.5rem !important;
+            /* 2. 左侧边栏：缩减高度，横向滑动，防遮挡 */
+            .sidebar-left { 
+                width: 100% !important; flex-direction: row !important; overflow-x: auto !important; overflow-y: hidden !important; 
+                flex-wrap: nowrap !important; padding: 0.5rem !important; gap: 0.5rem !important; align-items: center !important; 
+                border: 3px solid var(--border-color) !important; border-radius: 1rem !important;
             }
+            .sidebar-left > div > span, .sidebar-left .w-full.h-\\[2px\\] { display: none !important; }
+            .sidebar-left > div { flex-direction: row !important; width: auto !important; padding: 0 !important; border: none !important; background: transparent !important; margin: 0 !important; gap: 0.5rem !important; }
+            .sidebar-left button, .sidebar-left > div > button { width: auto !important; padding: 0.4rem 1rem !important; margin: 0 !important; border-radius: 1rem !important; white-space: nowrap !important; font-size: 0.8rem !important; flex-shrink: 0 !important; }
+            .sidebar-left button.group { flex-direction: row !important; padding: 0.4rem 1rem !important; gap: 0.5rem !important; background: #fffbeb !important; border: 2px solid #fcd34d !important; }
+            .sidebar-left button.group .w-14 { width: 1.5rem !important; height: 1.5rem !important; font-size: 1rem !important; border-width: 2px !important; border-radius: 0.3rem !important; }
+
+            /* 3. 宠物百科弹窗：强行上下分栏 */
+            #adoption-modal .relative { height: 90vh !important; display: flex !important; flex-direction: column !important; }
+            #adoption-modal .flex-grow.flex.overflow-hidden { flex-direction: column-reverse !important; display: flex !important; }
+            #adoption-modal .w-1\/2 { width: 100% !important; }
             
-            /* 隐藏占位置的文字标签和分割线 */
-            .sidebar-left > div > span, 
-            .sidebar-left .w-full.h-\\[2px\\] {
-                display: none !important;
-            }
+            #adoption-detail { height: 40% !important; border-bottom: 3px solid #f1f5f9 !important; border-left: none !important; border-right: none !important; padding: 1rem !important; flex-shrink: 0 !important; }
+            #adoption-list { height: 60% !important; border-right: none !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; padding: 0.5rem !important; gap: 0.5rem !important; }
             
-            /* 让里面的按钮排成一排 */
-            .sidebar-left > div {
-                flex-direction: row !important;
-                width: auto !important;
-                padding: 0 !important;
-                border: none !important;
-                background: transparent !important;
-                margin: 0 !important;
-                gap: 0.5rem !important;
-            }
-            
-            /* 按钮变成小胶囊 */
-            .sidebar-left button, 
-            .sidebar-left > div > button {
-                width: auto !important;
-                padding: 0.4rem 1rem !important;
-                margin: 0 !important;
-                border-radius: 1rem !important;
-                white-space: nowrap !important;
-                font-size: 0.8rem !important;
-                flex-shrink: 0 !important;
-            }
-            
-            /* 宠物百科按钮横向特调 */
-            .sidebar-left button.group {
-                flex-direction: row !important;
-                gap: 0.5rem !important;
-                padding: 0.4rem 1rem !important;
-                background: #fffbeb !important;
-                border: 2px solid #fcd34d !important;
-                border-radius: 1rem !important;
-            }
-            .sidebar-left button.group .w-14 {
-                width: 1.5rem !important;
-                height: 1.5rem !important;
-                font-size: 1rem !important;
-                border-width: 2px !important;
-                border-radius: 0.4rem !important;
-            }
-            
-            /* 3. 中间主战场解除高度限制 */
-            .center-content {
-                height: auto !important;
-                overflow: visible !important;
-            }
+            /* 防止详情区图片文字过大溢出 */
+            #adoption-detail .w-56, #adoption-detail .md\:w-64, #adoption-detail .h-56, #adoption-detail .md\:h-64 { width: 5.5rem !important; height: 5.5rem !important; min-height: 5.5rem !important; margin-bottom: 0.5rem !important; border-width: 3px !important; }
+            #adoption-detail h3 { font-size: 1.2rem !important; margin-bottom: 0.2rem !important; }
+            #adoption-detail p.text-base { font-size: 0.75rem !important; line-height: 1.3 !important; padding: 0 !important; }
+            #adoption-detail .text-7xl { font-size: 2.5rem !important; margin-bottom: 0.5rem !important; }
+            #adoption-detail .text-xl.text-indigo-300 { font-size: 0 !important; }
+            #adoption-detail .text-xl.text-indigo-300::after { content: "点击下方图鉴查看详情"; font-size: 0.9rem !important; color: #a5b4fc; }
         }
     </style>
 </head>
@@ -1281,7 +1235,7 @@
             viewMode: 'individual',
             rankLevel: 'all',
             rankType: 'individual',
-            isRankOpen: true, 
+            isRankOpen: false, 
             history: [],
             currentStudentIdForPet: null,
             selectedPetIndex: 0, 
@@ -1618,12 +1572,9 @@
             const curClass = getCurrentClass();
             if(curClass) document.getElementById('display-title').innerText = curClass.name;
             
-            // 🚀 纯手机端特判：如果屏幕宽度小于等于 767px（手机），则强制默认关闭积分榜弹窗
-            if (window.innerWidth <= 767 && state.isRankOpen) {
-                state.isRankOpen = false;
-            }
+            state.isRankOpen = false;
+            document.getElementById('sidebar-container').classList.add('collapsed');
             
-            if(!state.isRankOpen) toggleRankSidebar();
             updateDisplayDate();
         }
 
