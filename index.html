@@ -668,6 +668,7 @@
         </main>
 
         <div id="sidebar-container" class="sidebar-right-container collapsed">
+            <script>if(window.innerWidth <= 1024) document.getElementById('sidebar-container').style.display='none';</script>
             <div onclick="toggleRankSidebar()" class="rank-toggle-tab font-heiti">荣耀积分榜</div>
             <aside class="sidebar-right">
                 <div class="p-5 text-white flex flex-col gap-4">
@@ -1726,12 +1727,19 @@
 
         function toggleRankSidebar() {
             const container = document.getElementById('sidebar-container');
+            
+            // 解除物理封印，并强制刷新一下浏览器排版防止动画卡顿
+            container.style.display = ''; 
+            void container.offsetWidth; 
+            
             state.isRankOpen = !state.isRankOpen;
-            if(state.isRankOpen) container.classList.remove('collapsed');
-            else container.classList.add('collapsed');
+            if(state.isRankOpen) {
+                container.classList.remove('collapsed');
+            } else {
+                container.classList.add('collapsed');
+            }
             saveStateToLocal();
         }
-
         function switchAdminTab(t) {
             ['class', 'member', 'group', 'pets', 'data'].forEach(p => {
                 const tab = document.getElementById('atab-' + p), panel = document.getElementById('apanel-' + p);
