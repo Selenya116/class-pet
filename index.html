@@ -399,6 +399,204 @@
             .student-card:hover { transform: none !important; }
             .firework-p { box-shadow: none !important; }
         }
+    /* ================= 📱 移动端专属：弹窗榜单与 App 适配引擎 ================= */
+        @media (max-width: 1024px) {
+            /* 1. 基础布局与性能防卡顿 */
+            body { padding: 0.5rem !important; gap: 0.5rem !important; }
+            .flex-grow.gap-4.overflow-hidden { flex-direction: column !important; gap: 0.5rem !important; overflow-y: auto !important; height: auto !important; }
+            * { touch-action: manipulation; }
+            .animate-float { animation: none !important; transform: translateY(0) !important; }
+            .student-card:hover { transform: none !important; }
+            .firework-p { box-shadow: none !important; }
+            
+            /* 2. 顶部导航：变为智能金刚区 */
+            header { flex-direction: column !important; padding: 0.75rem !important; gap: 0.75rem !important; border-radius: 1.5rem !important; height: auto !important; }
+            header > div:first-child { width: 100% !important; justify-content: space-between !important; }
+            header h1 { font-size: 1.25rem !important; }
+            header > div:last-child { 
+                width: 100% !important; display: grid !important; 
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)) !important; 
+                gap: 0.5rem !important; margin-top: 0.25rem !important;
+            }
+            header .btn-clash { 
+                margin: 0 !important; padding: 0.6rem 0.2rem !important; font-size: 0.8rem !important; 
+                border-bottom-width: 4px !important; border-radius: 0.75rem !important;
+                display: flex !important; justify-content: center !important; align-items: center !important;
+                white-space: nowrap !important; letter-spacing: -0.5px !important; width: 100% !important;
+            }
+            
+            /* 唤醒隐藏的手机专属按钮 */
+            #mobile-rank-btn { display: flex !important; }
+            .mobile-close-btn { display: block !important; }
+
+            /* 3. 左侧控制台：变身底部横向滑动工具栏 */
+            .sidebar-left { width: 100% !important; flex-direction: row !important; overflow-x: auto !important; padding-bottom: 0.25rem !important; flex-shrink: 0 !important; }
+            .sidebar-left > div:first-child { flex-direction: row !important; width: max-content !important; padding: 0.5rem 1rem !important; gap: 1rem !important; border-radius: 1.5rem !important; margin-bottom: 0 !important; }
+            .sidebar-left .w-full.h-\\[2px\\] { width: 2px !important; height: auto !important; min-height: 20px; }
+            .sidebar-left > button { width: auto !important; padding: 0.5rem 1.5rem !important; margin-top: 0 !important; border-radius: 1.5rem !important; white-space: nowrap; }
+            
+            /* 4. 中间主战场：智能双列网格 */
+            .center-content { padding: 0.75rem !important; border-radius: 1.5rem !important; }
+            #paradise-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 0.5rem !important; }
+            .student-card { min-height: 200px !important; padding: 0.75rem !important; border-radius: 1rem !important; border-width: 2px !important; }
+            
+            /* 5. 🎯 核心魔法：仅在手机上，把右侧边栏原地变身成完美弹窗！ */
+            .rank-toggle-tab { display: none !important; } /* 隐藏电脑端的抽拉标签 */
+            
+            .sidebar-right-container { 
+                position: fixed !important; 
+                inset: 0 !important; 
+                width: 100vw !important; 
+                height: 100vh !important; 
+                background: rgba(0,0,0,0.6) !important; 
+                backdrop-filter: blur(4px) !important;
+                z-index: 9999 !important; 
+                justify-content: center !important; 
+                align-items: center !important; 
+                padding: 1rem !important;
+                margin: 0 !important;
+                transition: opacity 0.3s ease !important;
+            }
+
+            .sidebar-right-container.collapsed { 
+                opacity: 0 !important; 
+                pointer-events: none !important; 
+            }
+
+            .sidebar-right { 
+                width: 100% !important; 
+                max-width: 400px !important; 
+                height: 85vh !important; 
+                border-radius: 2rem !important; 
+                transform: scale(1) !important; 
+                transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+                margin: 0 !important;
+            }
+            .sidebar-right-container.collapsed .sidebar-right {
+                transform: scale(0.9) !important;
+            }
+        }
+    /* ================= 🌟 传说级·卡片专属晋级华丽特效 ================= */
+        /* 1. 背景放射金光动画 */
+        @keyframes radial-shine {
+            0% { background: radial-gradient(circle, rgba(251, 191, 36, 0.8) 0%, rgba(255,255,255,0) 0%); }
+            100% { background: radial-gradient(circle, rgba(251, 191, 36, 0.2) 70%, rgba(255,255,255,0) 100%); }
+        }
+        /* 2. 彩带碎纸屑喷射动画 */
+        @keyframes confetti-super-burst {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.2) rotate(0deg); }
+            20% { opacity: 1; scale: 1.5; } /* 瞬间放大 */
+            100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.5) rotate(var(--rot)); }
+        }
+        /* 3. 升级文字金色 3D 震击动画 */
+        @keyframes evolve-text-slam {
+            0% { opacity: 0; transform: translate(-50%, -100%) scale(5) rotateX(-90deg); filter: blur(10px); }
+            30% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotateX(0deg); filter: blur(0px); text-shadow: 0 0 50px #fbbf24, 0 10px 10px rgba(120, 53, 15, 0.5); }
+            40% { transform: translate(-50%, -50%) scale(1.2); } /* 撞击回弹 */
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); text-shadow: 0 0 30px #fbbf24; }
+            100% { opacity: 0; transform: translate(-50%, -100%) scale(0.8); filter: blur(5px); }
+        }
+    /* ================= 🌟 传说级·卡片专属晋级华丽特效 ================= */
+        /* 1. 背景放射金光动画 */
+        @keyframes radial-shine {
+            0% { background: radial-gradient(circle, rgba(251, 191, 36, 0.8) 0%, rgba(255,255,255,0) 0%); }
+            100% { background: radial-gradient(circle, rgba(251, 191, 36, 0.2) 70%, rgba(255,255,255,0) 100%); }
+        }
+        /* 2. 彩带碎纸屑喷射动画 */
+        @keyframes confetti-super-burst {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.2) rotate(0deg); }
+            20% { opacity: 1; scale: 1.5; } /* 瞬间放大 */
+            100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.5) rotate(var(--rot)); }
+        }
+        /* 3. 升级文字金色 3D 震击动画 */
+        @keyframes evolve-text-slam {
+            0% { opacity: 0; transform: translate(-50%, -100%) scale(5) rotateX(-90deg); filter: blur(10px); }
+            30% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotateX(0deg); filter: blur(0px); text-shadow: 0 0 50px #fbbf24, 0 10px 10px rgba(120, 53, 15, 0.5); }
+            40% { transform: translate(-50%, -50%) scale(1.2); } /* 撞击回弹 */
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); text-shadow: 0 0 30px #fbbf24; }
+            100% { opacity: 0; transform: translate(-50%, -100%) scale(0.8); filter: blur(5px); }
+        }
+    /* ================= 📱 纯手机端专属修复（绝对不影响电脑和平板） ================= */
+        @media (max-width: 767px) {
+            /* 1. 彻底解除页面的高度封印，让底下的卡片能滑下去 */
+            body, html {
+                height: auto !important;
+                min-height: 100vh !important;
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+            }
+            .flex-grow.gap-4.overflow-hidden {
+                overflow: visible !important;
+                height: auto !important;
+            }
+
+            /* 2. 把左侧控制台压扁成一行横向滑动的胶囊栏，释放屏幕高度 */
+            .sidebar-left {
+                width: 100% !important;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                overflow-y: hidden !important;
+                padding: 0.5rem !important;
+                background: var(--card-bg) !important;
+                border: 3px solid var(--border-color) !important;
+                border-radius: 1rem !important;
+                align-items: center !important;
+                gap: 0.5rem !important;
+            }
+            
+            /* 隐藏占位置的文字标签和分割线 */
+            .sidebar-left > div > span, 
+            .sidebar-left .w-full.h-\\[2px\\] {
+                display: none !important;
+            }
+            
+            /* 让里面的按钮排成一排 */
+            .sidebar-left > div {
+                flex-direction: row !important;
+                width: auto !important;
+                padding: 0 !important;
+                border: none !important;
+                background: transparent !important;
+                margin: 0 !important;
+                gap: 0.5rem !important;
+            }
+            
+            /* 按钮变成小胶囊 */
+            .sidebar-left button, 
+            .sidebar-left > div > button {
+                width: auto !important;
+                padding: 0.4rem 1rem !important;
+                margin: 0 !important;
+                border-radius: 1rem !important;
+                white-space: nowrap !important;
+                font-size: 0.8rem !important;
+                flex-shrink: 0 !important;
+            }
+            
+            /* 宠物百科按钮横向特调 */
+            .sidebar-left button.group {
+                flex-direction: row !important;
+                gap: 0.5rem !important;
+                padding: 0.4rem 1rem !important;
+                background: #fffbeb !important;
+                border: 2px solid #fcd34d !important;
+                border-radius: 1rem !important;
+            }
+            .sidebar-left button.group .w-14 {
+                width: 1.5rem !important;
+                height: 1.5rem !important;
+                font-size: 1rem !important;
+                border-width: 2px !important;
+                border-radius: 0.4rem !important;
+            }
+            
+            /* 3. 中间主战场解除高度限制 */
+            .center-content {
+                height: auto !important;
+                overflow: visible !important;
+            }
+        }
     </style>
 </head>
 <body class="pixel-bg flex flex-col p-4 gap-4 h-screen">
@@ -433,6 +631,7 @@
     <header class="flex justify-between items-center bg-white rounded-[2rem] px-8 py-4 border-4 border-indigo-900 border-b-8 z-10">
         <div class="flex items-center gap-6">
             <div class="flex items-center gap-3">
+                <button id="mobile-rank-btn" onclick="toggleRankSidebar()" class="btn-clash bg-purple-500 text-white px-5 py-2.5 rounded-xl border-b-6 border-purple-700 font-black text-base shadow-sm" style="display: none;">🏆 荣耀榜单</button>
                 <span class="text-4xl drop-shadow-sm">🐾</span>
                 <div class="flex flex-col">
                     <h1 id="display-title" class="text-2xl font-black tracking-tight leading-none">班级宠物乐园</h1>
@@ -445,6 +644,14 @@
         </div>
         
         <div class="flex items-center gap-3">
+            <div id="user-vip-info" class="hidden items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border-2 border-slate-200 shadow-sm mr-2" title="您的账号授权信息">
+                <div class="w-7 h-7 bg-indigo-600 rounded-full flex items-center justify-center text-white text-xs font-black shadow-inner">👑</div>
+                <div class="flex flex-col justify-center">
+                    <span class="text-[11px] font-black text-indigo-900 leading-none mb-1" id="header-username">加载中...</span>
+                    <span class="text-[9px] font-black text-slate-500 leading-none" id="header-expire-days">计算中...</span>
+                </div>
+            </div>
+            
             <button onclick="toggleModal('shop-modal', true)" class="btn-clash bg-amber-400 text-indigo-950 px-5 py-2.5 rounded-xl border-b-6 border-amber-600 font-black text-base shadow-sm">🛍️ 积分商城</button>
             <button onclick="toggleModal('rules-modal', true)" class="btn-clash bg-emerald-400 text-indigo-950 px-5 py-2.5 rounded-xl border-b-6 border-emerald-600 font-black text-base shadow-sm">📜 规则设置</button>
             <button onclick="toggleModal('admin-modal', true)" class="btn-clash bg-blue-500 text-white px-5 py-2.5 rounded-xl border-b-6 border-blue-700 font-black text-base shadow-sm">🛠️ 班级管理</button>
@@ -510,9 +717,12 @@
             <div onclick="toggleRankSidebar()" class="rank-toggle-tab font-heiti">荣耀积分榜</div>
             <aside class="sidebar-right">
                 <div class="p-5 text-white flex flex-col gap-4">
-                    <div class="flex items-center gap-2">
-                        <span class="text-2xl">🏆</span>
-                        <h3 class="font-black text-lg font-heiti text-amber-400 uppercase tracking-wider">荣耀榜单</h3>
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">🏆</span>
+                            <h3 class="font-black text-lg font-heiti text-amber-400 uppercase tracking-wider">荣耀榜单</h3>
+                        </div>
+                        <button onclick="toggleRankSidebar()" class="mobile-close-btn text-white hover:text-rose-400 text-3xl transition-colors" style="display: none;">✕</button>
                     </div>
                     <div class="flex bg-indigo-950/40 p-1 rounded-xl gap-1 border border-indigo-800">
                         <button onclick="setRankLevel('all')" id="rl-all" class="flex-grow py-1.5 text-[10px] font-black bg-amber-400 text-indigo-900 rounded-lg shadow-sm transition-all">全部</button>
@@ -799,7 +1009,7 @@
         <div onclick="toggleModal('batch-rule-modal', false)" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
         <div class="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-xs overflow-hidden flex flex-col border-4 border-indigo-900">
             <div class="p-4 border-b-2 border-slate-100 bg-slate-50 flex justify-between items-center shrink-0">
-                <h3 id="batch-rule-title" class="font-black text-slate-700 text-sm font-heiti">选择应用规则</h3>
+                <h3 id="batch-rule-title" class="font-black text-slate-700 text-sm font-heiti">选择项目</h3>
                 <button onclick="toggleModal('batch-rule-modal', false)" class="text-slate-400 hover:text-rose-500 text-2xl transition-colors">✕</button>
             </div>
             <div id="batch-rules-list" class="p-4 space-y-2 max-h-80 overflow-y-auto custom-scrollbar"></div>
@@ -889,11 +1099,11 @@
             { id: 'dog4', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/Ft2U/1024X1024/%E6%B3%B0%E8%BF%AA1.png')]", name: '泰迪犬', desc: '顶着一头自来卷的精明小机灵鬼。不仅不掉毛，还特别会察言观色讨人欢心。' },
             { id: 'dog5', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/37oN/1024X1024/%E6%9D%9C%E5%AE%BE1.png')]", name: '杜宾犬', desc: '帅到掉渣的西装暴徒！外表冷酷威严，内心其实是个极其护主的小傲娇。' },
             { id: 'dog6', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260209/3Hoy/1024X1024/%E6%AF%94%E7%86%8A1.png')]", name: '比熊犬', desc: '永远快乐的“行走的棉花糖”。只要给它一点零食，就能乐得像个小疯子。' },
-            { id: 'dog6', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/uhQ6/1024X1024/%E9%98%BF%E6%8B%89%E6%96%AF%E5%8A%A01.png')]", name: '阿拉斯加犬', desc: '别看它体型巨大像个霸道总裁，其实是个体能满格的“傻白甜”。' },
-            { id: 'dog6', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/CBnP/2048X2048/%E4%B8%AD%E5%8D%8E%E7%94%B0%E5%9B%AD%E7%8A%AC1.png')]", name: '中华田园犬', desc: '忠诚度拉满的“大黄”。看家护院一把好手，也是最懂你的贴心老铁。' },
-            { id: 'dog6', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/rfSK/2048X2048/%E9%B8%A11.png')]", name: '鸡', desc: '每天准时打鸣的天然闹钟。虽然不太会飞，但在院子里跑起来可比谁都快。' },
-            { id: 'dog6', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/8nNk/2048X2048/%E9%B8%AD1.png')]", name: '鸭', desc: '顶着扁扁嘴的游泳健将。走起路来摇摇摆摆，最爱在水里上演“嘎嘎嘎”的多重奏。' },
-            { id: 'dog6', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/WTLc/2048X2048/%E9%B9%851.png')]", name: '鹅', desc: '农场村霸本霸！战斗力惊人，敢于向一切不明生物发起冲锋，惹谁都别惹它。' },
+            { id: 'dog7', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/uhQ6/1024X1024/%E9%98%BF%E6%8B%89%E6%96%AF%E5%8A%A01.png')]", name: '阿拉斯加犬', desc: '别看它体型巨大像个霸道总裁，其实是个体能满格的“傻白甜”。' },
+            { id: 'dog8', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/CBnP/2048X2048/%E4%B8%AD%E5%8D%8E%E7%94%B0%E5%9B%AD%E7%8A%AC1.png')]", name: '中华田园犬', desc: '忠诚度拉满的“大黄”。看家护院一把好手，也是最懂你的贴心老铁。' },
+            { id: 'bird4', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/rfSK/2048X2048/%E9%B8%A11.png')]", name: '鸡', desc: '每天准时打鸣的天然闹钟。虽然不太会飞，但在院子里跑起来可比谁都快。' },
+            { id: 'bird5', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/8nNk/2048X2048/%E9%B8%AD1.png')]", name: '鸭', desc: '顶着扁扁嘴的游泳健将。走起路来摇摇摆摆，最爱在水里上演“嘎嘎嘎”的多重奏。' },
+            { id: 'bird6', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/WTLc/2048X2048/%E9%B9%851.png')]", name: '鹅', desc: '农场村霸本霸！战斗力惊人，敢于向一切不明生物发起冲锋，惹谁都别惹它。' },
             { id: 'mouse', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/yz15/1024X1024/%E4%BB%93%E9%BC%A01.png')]", name: '仓鼠', desc: '越狱大师兼“跑轮永动机”。它那弹性的脸颊，可以藏下比自己头还大的瓜子！' },
             { id: 'ciwei', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/GFDf/2048X2048/%E5%88%BA%E7%8C%AC1.png')]", name: '刺猬', desc: '披着铠甲的社恐小可爱。一旦跟你混熟了，就会毫不防备地向你敞开软乎乎的小肚肚。' },
             { id: 'rabbit1', color: "bg-[url('https://pic4.fukit.cn/autoupload/OZKj-s8YAg7R_eaJV_kZJNiO_OyvX7mIgxFBfDMDErs/20260228/nJ4J/2048X2048/%E8%8D%B7%E5%85%B0%E5%85%941.png')]", name: '荷兰兔', desc: '穿着雪白的小礼服，拥有一对竖着的小短耳。只需稍微蹦跶一下就能萌化人心。' },
@@ -1192,70 +1402,9 @@
         // ================= 商业云端 SaaS 核心逻辑 =================
         // ⚠️【极其重要】：请把下面双引号里的内容，换成你 Bmob 后台里的真实钥匙！
         Bmob.initialize("5f1587aa536ab4d8", "1234567890987654"); 
+        Bmob.HOST = "https://api.guangrurenxinxi.top";
 
         let currentCloudDataId = null; // 记住当前登录老师的云端存档抽屉编号
-
-        function checkAuthState() {
-            const currentUser = Bmob.User.current();
-            const gate = document.getElementById('auth-gate-container');
-            const loginRegArea = document.getElementById('auth-login-reg-area');
-            const actArea = document.getElementById('auth-activate-area');
-
-            if (currentUser) {
-                loginRegArea.classList.add('hidden');
-                document.getElementById('display-username').innerText = currentUser.username;
-                
-                const query = Bmob.Query("CloudSaveData");
-                query.equalTo("username", "==", currentUser.username);
-                query.find().then(res => {
-                    if (res && res.length > 0) {
-                        currentCloudDataId = res[0].objectId; 
-                        gate.style.display = 'none'; 
-                        try {
-                            const cloudState = JSON.parse(res[0].appData);
-                            state = { ...DEFAULT_STATE, ...cloudState }; 
-                            if(cloudState.config) {
-                                state.config = { ...DEFAULT_STATE.config, ...cloudState.config };
-                                if(cloudState.config.stages) state.config.stages = { ...DEFAULT_STATE.config.stages, ...cloudState.config.stages };
-                            }
-                            state.isSelectionMode = false; state.selectedIds = [];
-                            
-                            // 拼图：去专属房间接回各班级详细数据
-                            const classQuery = Bmob.Query("CloudClassData");
-                            classQuery.equalTo("username", "==", currentUser.username);
-                            classQuery.limit(100); 
-                            classQuery.find().then(classRes => {
-                                if(classRes && classRes.length > 0) {
-                                    const detailedClasses = [];
-                                    classRes.forEach(item => {
-                                        const realClassData = JSON.parse(item.classData);
-                                        detailedClasses.push(realClassData);
-                                        cloudClassIdMap[realClassData.id] = item.objectId; 
-                                    });
-                                    state.classes = state.classes.map(shell => {
-                                        const detail = detailedClasses.find(d => d.id === shell.id);
-                                        return detail ? detail : shell; 
-                                    });
-                                }
-                                initMainApp(); 
-                            }).catch(err => {
-                                initMainApp();
-                            });
-                        } catch (e) { alert("云端数据读取失败！"); }
-                    } else {
-                        gate.style.display = 'flex';
-                        actArea.classList.remove('hidden');
-                    }
-                }).catch(err => { 
-                    gate.style.display = 'flex';
-                    actArea.classList.remove('hidden');
-                });
-            } else {
-                gate.style.display = 'flex';
-                loginRegArea.classList.remove('hidden');
-                actArea.classList.add('hidden');
-            }
-        }
 
         function toggleLoginMode(isLogin) {
             document.getElementById('mode-login-btn').className = isLogin ? "flex-grow py-3 text-sm font-black bg-indigo-600 text-white rounded-lg shadow-sm transition-all" : "flex-grow py-3 text-sm font-black text-indigo-400 hover:bg-white rounded-lg transition-all";
@@ -1314,41 +1463,87 @@
 
             const btn = document.querySelector('#auth-activate-area button');
             const originalText = btn.innerText;
-            btn.innerText = "⏳ 连线专属服务器验证中..."; btn.disabled = true;
+            btn.innerText = "⏳ 连接云端防伪中心校验中..."; btn.disabled = true;
 
-            // 🌟 核心魔法：跨海大桥！向我们刚建好的本地服务器发送请求
-            fetch('http://localhost:3000/api/verify-code', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ code: code }) // 把网页上填的激活码打包发给后端
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // ✅ 后端点头了：验证通过！
-                    // (保留这里的 Bmob 逻辑，因为验证通过后，还要给用户建一个存分数的空抽屉)
-                    const saveQuery = Bmob.Query("CloudSaveData");
-                    saveQuery.set("username", Bmob.User.current().username);
-                    saveQuery.set("appData", JSON.stringify(DEFAULT_STATE)); 
-                    saveQuery.save().then(saveRes => {
-                        alert("🎉 " + data.message); // 弹出后端传回来的成功提示
-                        checkAuthState(); 
-                    }).catch(err => { 
-                        alert("创建云端存档失败！"); 
-                        btn.innerText = originalText; btn.disabled = false; 
-                    });
-                } else {
-                    // ❌ 后端摇头了：假码或已被使用
-                    alert("❌ " + data.message); // 弹出后端传回来的失败原因
+            // 🚨 修复点 1：表名加上了 s
+            const query = Bmob.Query("ActivationCodes");
+            query.equalTo("code", "==", code);
+            query.find().then(res => {
+                if (res.length === 0) {
+                    alert("❌ 激活码无效，请检查是否输入正确！");
                     btn.innerText = originalText; btn.disabled = false;
+                    return;
                 }
-            })
-            .catch(err => { 
-                console.error("连线失败:", err);
-                alert("连接专属服务器失败！请检查大管家（黑窗口）是否正在运行？"); 
-                btn.innerText = originalText; btn.disabled = false; 
+
+                const codeRecord = res[0];
+                if (codeRecord.isUsed) {
+                    alert("❌ 对不起，该激活码已被其他账号使用！");
+                    btn.innerText = originalText; btn.disabled = false;
+                    return;
+                }
+
+                // 🌟 解析激活码的天数
+                let durationDays = codeRecord.durationDays !== undefined ? codeRecord.durationDays : -1; 
+                let newExpireAt = -1; 
+                if (durationDays > 0) {
+                    newExpireAt = Date.now() + durationDays * 24 * 60 * 60 * 1000;
+                }
+
+                // 核销激活码
+                // 🚨 修复点 2：这里的表名也加上了 s
+                const updateQuery = Bmob.Query("ActivationCodes");
+                updateQuery.set("id", codeRecord.objectId);
+                updateQuery.set("isUsed", true);
+                updateQuery.set("usedBy", Bmob.User.current().username); 
+
+                updateQuery.save().then(() => {
+                    const checkSaveQuery = Bmob.Query("CloudSaveData");
+                    checkSaveQuery.equalTo("username", "==", Bmob.User.current().username);
+                    checkSaveQuery.find().then(saveRes => {
+                        if (saveRes && saveRes.length > 0) {
+                            // 老用户续费
+                            let existingExpireAt = saveRes[0].expireAt || Date.now();
+                            let baseTime = (existingExpireAt === -1 || existingExpireAt > Date.now()) ? existingExpireAt : Date.now();
+                            
+                            let finalExpireAt = -1;
+                            if (durationDays > 0) {
+                                if (baseTime !== -1) {
+                                    finalExpireAt = baseTime + durationDays * 24 * 60 * 60 * 1000;
+                                }
+                            }
+                            
+                            const updateSave = Bmob.Query("CloudSaveData");
+                            updateSave.set("id", saveRes[0].objectId);
+                            updateSave.set("expireAt", finalExpireAt);
+                            updateSave.save().then(() => {
+                                alert("🎉 激活/续费成功！欢迎回到班级宠物乐园！"); 
+                                checkAuthState(); 
+                            });
+                        } else {
+                            // 新用户激活
+                            const saveQuery = Bmob.Query("CloudSaveData");
+                            saveQuery.set("username", Bmob.User.current().username);
+                            saveQuery.set("appData", JSON.stringify(DEFAULT_STATE)); 
+                            saveQuery.set("expireAt", newExpireAt);
+                            saveQuery.save().then(saveRes => {
+                                alert("🎉 激活成功！专属云端数据已生成，欢迎来到班级宠物乐园！"); 
+                                checkAuthState(); 
+                            }).catch(err => { 
+                                alert("创建云端存档失败，请检查网络！"); 
+                                console.error("存档创建报错:", err);
+                                btn.innerText = originalText; btn.disabled = false; 
+                            });
+                        }
+                    });
+                }).catch(err => {
+                    alert("核销激活码时发生网络故障，请重试！");
+                    console.error("核销报错:", err);
+                    btn.innerText = originalText; btn.disabled = false;
+                });
+            }).catch(err => {
+                alert("无法连接到验证服务器，请检查网络！");
+                console.error("服务器连接报错:", err); // ✨ 新增：在控制台打印真实报错原因
+                btn.innerText = originalText; btn.disabled = false;
             });
         }
 
@@ -1393,6 +1588,27 @@
             }
         }
         
+        function initStageInputs() {
+            // 1. 初始化【规则设置】里的成长阶段阈值
+            const st = state.config.stages;
+            if(document.getElementById('stage-infant')) document.getElementById('stage-infant').value = st.infant;
+            if(document.getElementById('stage-teen')) document.getElementById('stage-teen').value = st.teen;
+            if(document.getElementById('stage-adult')) document.getElementById('stage-adult').value = st.adult;
+            if(document.getElementById('stage-elder')) document.getElementById('stage-elder').value = st.elder;
+            if(document.getElementById('rules-happiness-ratio')) document.getElementById('rules-happiness-ratio').value = state.config.pointsPerHappiness;
+
+            // 2. 顺手修复【系统设置】里日期打开为空的 Bug
+            const d = state.currentSystemDate;
+            const s = state.currentSemesterInfo;
+            if(document.getElementById('sys-year')) {
+                document.getElementById('sys-year').value = d.y;
+                document.getElementById('sys-month').value = d.m;
+                document.getElementById('sys-day').value = d.d;
+                document.getElementById('sys-total-weeks').value = s.totalWeeks;
+                document.getElementById('sys-current-week').value = s.currentWeek;
+                document.getElementById('sys-day-of-week').value = s.dayOfWeek;
+            }
+        }
         function initMainApp() {
             const savedTheme = localStorage.getItem('class-paradise-theme') || 'default';
             setTheme(savedTheme);
@@ -1401,28 +1617,123 @@
             initStageInputs();
             const curClass = getCurrentClass();
             if(curClass) document.getElementById('display-title').innerText = curClass.name;
+            
+            // 🚀 纯手机端特判：如果屏幕宽度小于等于 767px（手机），则强制默认关闭积分榜弹窗
+            if (window.innerWidth <= 767 && state.isRankOpen) {
+                state.isRankOpen = false;
+            }
+            
             if(!state.isRankOpen) toggleRankSidebar();
             updateDisplayDate();
         }
 
         // ⚡️ 极速启动：不再等待网络和图片加载，瞬间完成云端授权验证！
-        checkAuthState();
-        function initStageInputs() {
-            const st = state.config.stages;
-            document.getElementById('stage-infant').value = st.infant;
-            document.getElementById('stage-teen').value = st.teen;
-            document.getElementById('stage-adult').value = st.adult;
-            document.getElementById('stage-elder').value = st.elder;
-            document.getElementById('rules-happiness-ratio').value = state.config.pointsPerHappiness;
-            if (state.currentSystemDate) {
-                document.getElementById('sys-year').value = state.currentSystemDate.y;
-                document.getElementById('sys-month').value = state.currentSystemDate.m;
-                document.getElementById('sys-day').value = state.currentSystemDate.d;
-            }
-            if (state.currentSemesterInfo) {
-                document.getElementById('sys-total-weeks').value = state.currentSemesterInfo.totalWeeks;
-                document.getElementById('sys-current-week').value = state.currentSemesterInfo.currentWeek;
-                document.getElementById('sys-day-of-week').value = state.currentSemesterInfo.dayOfWeek;
+        function checkAuthState() {
+            const currentUser = Bmob.User.current();
+            const gate = document.getElementById('auth-gate-container');
+            const loginRegArea = document.getElementById('auth-login-reg-area');
+            const actArea = document.getElementById('auth-activate-area');
+
+            if (currentUser) {
+                loginRegArea.classList.add('hidden');
+                document.getElementById('display-username').innerText = currentUser.username;
+                
+                const query = Bmob.Query("CloudSaveData");
+                query.equalTo("username", "==", currentUser.username);
+                query.find().then(res => {
+                    if (res && res.length > 0) {
+                        const saveRecord = res[0];
+                        const expireAt = saveRecord.expireAt;
+
+                        // 🌟 1. 验证是否已过期
+                        if (expireAt && expireAt !== -1 && Date.now() > expireAt) {
+                            gate.style.display = 'flex';
+                            actArea.classList.remove('hidden');
+                            const descText = document.querySelector('#auth-activate-area p');
+                            if(descText) descText.innerText = "⚠️ 您的账号试用/订阅已过期，请重新绑定激活码续费！";
+                            // 隐藏顶部状态牌
+                            const vipInfo = document.getElementById('user-vip-info');
+                            if(vipInfo) vipInfo.classList.add('hidden');
+                            return; 
+                        }
+
+                        // 🌟 2. 核心新增：更新顶部导航栏的有效期 UI
+                        const vipInfoContainer = document.getElementById('user-vip-info');
+                        const headerUsername = document.getElementById('header-username');
+                        const headerExpireDays = document.getElementById('header-expire-days');
+                        
+                        if (vipInfoContainer && headerUsername && headerExpireDays) {
+                            vipInfoContainer.classList.remove('hidden');
+                            vipInfoContainer.classList.add('flex'); // 显示卡片
+                            headerUsername.innerText = currentUser.username;
+                            
+                            if (!expireAt || expireAt === -1) {
+                                // 永久版
+                                headerExpireDays.innerText = "⭐ 永久至尊版";
+                                headerExpireDays.className = "text-[9px] font-black text-emerald-600 leading-none";
+                            } else {
+                                // 计算剩余天数
+                                const Math = window.Math;
+                                const timeLeft = expireAt - Date.now();
+                                const daysLeft = Math.ceil(timeLeft / (1000 * 60 * 60 * 24));
+                                
+                                headerExpireDays.innerText = `⏳ 剩余 ${daysLeft} 天`;
+                                
+                                // 不到3天时，标红并闪烁提醒
+                                if (daysLeft <= 3) {
+                                    headerExpireDays.className = "text-[9px] font-black text-rose-500 leading-none animate-pulse";
+                                } else {
+                                    headerExpireDays.className = "text-[9px] font-black text-amber-600 leading-none";
+                                }
+                            }
+                        }
+
+                        currentCloudDataId = saveRecord.objectId; 
+                        gate.style.display = 'none'; 
+                        try {
+                            const cloudState = JSON.parse(saveRecord.appData);
+                            state = { ...DEFAULT_STATE, ...cloudState }; 
+                            if(cloudState.config) {
+                                state.config = { ...DEFAULT_STATE.config, ...cloudState.config };
+                                if(cloudState.config.stages) state.config.stages = { ...DEFAULT_STATE.config.stages, ...cloudState.config.stages };
+                            }
+                            state.isSelectionMode = false; state.selectedIds = [];
+                            
+                            const classQuery = Bmob.Query("CloudClassData");
+                            classQuery.equalTo("username", "==", currentUser.username);
+                            classQuery.limit(100); 
+                            classQuery.find().then(classRes => {
+                                if(classRes && classRes.length > 0) {
+                                    const detailedClasses = [];
+                                    classRes.forEach(item => {
+                                        const realClassData = JSON.parse(item.classData);
+                                        detailedClasses.push(realClassData);
+                                        cloudClassIdMap[realClassData.id] = item.objectId; 
+                                    });
+                                    state.classes = state.classes.map(shell => {
+                                        const detail = detailedClasses.find(d => d.id === shell.id);
+                                        return detail ? detail : shell; 
+                                    });
+                                }
+                                initMainApp(); 
+                            }).catch(err => {
+                                initMainApp();
+                            });
+                        } catch (e) { alert("云端数据读取失败！"); }
+                    } else {
+                        gate.style.display = 'flex';
+                        actArea.classList.remove('hidden');
+                        const descText = document.querySelector('#auth-activate-area p');
+                        if(descText) descText.innerText = "首次使用需要绑定您的正版激活码";
+                    }
+                }).catch(err => { 
+                    gate.style.display = 'flex';
+                    actArea.classList.remove('hidden');
+                });
+            } else {
+                gate.style.display = 'flex';
+                loginRegArea.classList.remove('hidden');
+                actArea.classList.add('hidden');
             }
         }
 
@@ -1509,32 +1820,68 @@
         }
 
         function renderStudentCard(s) {
-            const st = state.config.stages; 
-            const totalPts = Number(s.points) || 0;
-            // 核心：当前宠物的进度 = 历史总积分 - 领养这只宠物时的起跑线积分
-            const petPts = s.hasPet ? Math.max(0, totalPts - (Number(s.petStartPoints) || 0)) : 0;
-            const pts = petPts; 
-            const inf = Number(st.infant)||0, te = Number(st.teen)||0, ad = Number(st.adult)||0, el = Number(st.elder)||0;
-            
-            const t1 = inf;
-            const t2 = inf + te;
-            const t3 = inf + te + ad;
-            const t4 = inf + te + ad + el;
+    const st = state.config.stages; 
+    const totalPts = Number(s.points) || 0;
+    
+    // 🚀 核心逻辑：当前宠物的得分 = 终身总分 - 领养这只宠物时的起跑线总分
+    // 如果还没领养宠物，分数就是 0
+    const petPts = s.hasPet ? Math.max(0, totalPts - (Number(s.petStartPoints) || 0)) : 0;
+    
+    const inf = Number(st.infant)||0, te = Number(st.teen)||0, ad = Number(st.adult)||0, el = Number(st.elder)||0;
+    const t1 = inf;
+    const t2 = inf + te;
+    const t3 = inf + te + ad;
+    const t4 = inf + te + ad + el;
 
-            let minRange = 0, maxRange = t1, stageName = "🌱 幼年期";
-            if(s.lv === 2) { minRange = t1; maxRange = t2; stageName = "🌿 少年期"; } 
-            else if(s.lv === 3) { minRange = t2; maxRange = t3; stageName = "🌳 青年期"; } 
-            else if(s.lv === 4) { minRange = t3; maxRange = t4; stageName = "🏆 成熟期"; }
-            
-            const prog = maxRange > minRange ? Math.min(100, Math.max(0, ((pts - minRange) / (maxRange - minRange)) * 100)) : 100;
-            const isFullyGrown = s.lv === 4 && pts >= t4;
-            
-            let currentImage = null;
-            try { if (PET_EVOLUTION_MAP[s.color]) currentImage = PET_EVOLUTION_MAP[s.color][s.lv - 1]; } catch (e) { }
-            let finalStyle = (currentImage && !currentImage.includes("这里填")) ? `background-image: ${currentImage} !important; background-color: transparent !important;` : "";
-            
-            return `<div data-id="${s.id}" onclick="selectStudent(${s.id}, event)" class="student-card rounded-[1.5rem] p-4 border-4 flex flex-col items-center hover:translate-y-[-4px] transition-all relative group cursor-pointer h-full min-h-[280px] ${isFullyGrown ? 'gold-glow' : ''}">${state.isSelectionMode ? `<div class="absolute top-3 right-3 checkbox-custom ${state.selectedIds.includes(s.id) ? 'checked' : ''}"></div>` : ''}<div class="text-lg font-black mb-3 font-heiti text-center">${s.name}</div>${s.hasPet ? `<div class="w-28 h-28 ${s.color} rounded-[2rem] relative animate-float shadow-md mb-3 flex items-center justify-center border-4 border-white bg-cover bg-center bg-no-repeat" style="${finalStyle}"></div>` : `<div onclick="event.stopPropagation(); openPetSetup(${s.id})" class="w-28 h-28 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2rem] flex items-center justify-center text-slate-300 mb-3 transition-all hover:bg-slate-100"><span class="text-4xl font-light">+</span></div>`}<div class="w-full space-y-1 mt-auto text-center"><div class="text-sm font-black text-indigo-950 font-heiti truncate mt-1">${s.petName || '暂未孵化'}</div><div class="flex items-center justify-center gap-2"><div class="text-[10px] font-black bg-indigo-50 px-2 py-0.5 rounded-full">${stageName}</div><div class="text-[10px] font-black bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full">😊 开心 ${s.happiness || 0}</div></div>${isFullyGrown ? `<div class="mt-2 flex flex-col gap-2"><div class="text-[10px] text-amber-500 font-black animate-pulse">🌟 宠物已经满级啦！ 🌟</div><button onclick="event.stopPropagation(); finishPetJourney(${s.id})" class="btn-graduate w-full py-1.5 bg-amber-400 text-indigo-950 rounded-xl text-[11px] font-black border-b-4 border-amber-600 shadow-sm hover:scale-105 active:scale-95 transition-all">完成旅程 & 重新领养</button></div>` : `<div class="progress-bar-container mt-1"><div class="progress-bar-fill" style="width: ${prog}%"></div></div><div class="text-[10px] text-slate-400 font-bold mt-1">${Math.max(0, pts - minRange)} / ${maxRange - minRange}</div><div class="flex items-center justify-center gap-3 pt-2"><button onclick="event.stopPropagation(); updatePoints(${s.id}, -1)" class="btn-control">－</button><span class="text-base font-black font-heiti" title="终身总积分">${totalPts}</span><button onclick="event.stopPropagation(); updatePoints(${s.id}, 1)" class="btn-control">＋</button></div>`}</div></div>`;
+    let minRange = 0, maxRange = t1, stageName = "🌱 幼年期";
+    if(s.lv === 2) { minRange = t1; maxRange = t2; stageName = "🌿 少年期"; } 
+    else if(s.lv === 3) { minRange = t2; maxRange = t3; stageName = "🌳 青年期"; } 
+    else if(s.lv === 4) { minRange = t3; maxRange = t4; stageName = "🏆 成熟期"; }
+    
+    const prog = maxRange > minRange ? Math.min(100, Math.max(0, ((petPts - minRange) / (maxRange - minRange)) * 100)) : 100;
+    const isFullyGrown = s.lv === 4 && petPts >= t4;
+    
+    let currentImage = null;
+    try { if (PET_EVOLUTION_MAP[s.color]) currentImage = PET_EVOLUTION_MAP[s.color][s.lv - 1]; } catch (e) { }
+    let finalStyle = (currentImage && !currentImage.includes("这里填")) ? `background-image: ${currentImage} !important; background-color: transparent !important;` : "";
+    
+    return `
+    <div data-id="${s.id}" onclick="selectStudent(${s.id}, event)" class="student-card rounded-[1.5rem] p-4 border-4 flex flex-col items-center hover:translate-y-[-4px] transition-all relative group cursor-pointer h-full min-h-[280px] ${isFullyGrown ? 'gold-glow' : ''}">
+        ${state.isSelectionMode ? `<div class="absolute top-3 right-3 checkbox-custom ${state.selectedIds.includes(s.id) ? 'checked' : ''}"></div>` : ''}
+        
+        <div class="text-lg font-black mb-3 font-heiti text-center">${s.name}</div>
+        
+        ${s.hasPet ? 
+            `<div class="w-28 h-28 ${s.color} rounded-[2rem] relative animate-float shadow-md mb-3 flex items-center justify-center border-4 border-white bg-cover bg-center bg-no-repeat" style="${finalStyle}"></div>` : 
+            `<div onclick="event.stopPropagation(); openPetSetup(${s.id})" class="w-28 h-28 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2rem] flex items-center justify-center text-slate-300 mb-3 transition-all hover:bg-slate-100"><span class="text-4xl font-light">+</span></div>`
         }
+
+        <div class="w-full space-y-1 mt-auto text-center">
+            <div class="text-sm font-black text-indigo-950 font-heiti truncate mt-1">${s.petName || '暂未孵化'}</div>
+            <div class="flex items-center justify-center gap-2">
+                <div class="text-[10px] font-black bg-indigo-50 px-2 py-0.5 rounded-full">${stageName}</div>
+                <div class="text-[10px] font-black bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full">😊 开心 ${s.happiness || 0}</div>
+            </div>
+
+            ${isFullyGrown ? 
+                `<div class="mt-2 flex flex-col gap-2">
+                    <div class="text-[10px] text-amber-500 font-black animate-pulse">🌟 宠物已经满级啦！ 🌟</div>
+                    <button onclick="event.stopPropagation(); finishPetJourney(${s.id})" class="btn-graduate w-full py-1.5 bg-amber-400 text-indigo-950 rounded-xl text-[11px] font-black border-b-4 border-amber-600 shadow-sm hover:scale-105 active:scale-95 transition-all">完成旅程 & 重新领养</button>
+                </div>` : 
+                `<div class="progress-bar-container mt-1">
+                    <div class="progress-bar-fill" style="width: ${prog}%"></div>
+                </div>
+                <div class="text-[10px] text-slate-400 font-bold mt-1">${Math.max(0, petPts - minRange)} / ${maxRange - minRange}</div>
+                
+                <div class="flex items-center justify-center gap-3 pt-2">
+                    <button onclick="event.stopPropagation(); updatePoints(${s.id}, -1)" class="btn-control">－</button>
+                    <span class="text-base font-black font-heiti" title="当前宠物积分">${petPts}</span>
+                    <button onclick="event.stopPropagation(); updatePoints(${s.id}, 1)" class="btn-control">＋</button>
+                </div>`
+            }
+        </div>
+    </div>`;
+}
 
        function renderStudentPetsAdmin() {
             const cls = getCurrentClass(), list = document.getElementById('m-pets-list');
@@ -1742,6 +2089,8 @@
             const t3 = inf + te + ad;
             const t4 = inf + te + ad + el;
 
+            const oldLv = s.lv; // 🌟 核心：在计算前，先悄悄记住它原来的等级
+
             let targetLv = 1;
             if (pts >= t3) targetLv = 4;
             else if (pts >= t2) targetLv = 3;
@@ -1749,12 +2098,95 @@
             
             s.lv = targetLv;
 
+            // 🌟 核心引擎：如果新等级大于旧等级，并且它有宠物，就触发专属华丽特效！
+            if (s.lv > oldLv && s.hasPet) {
+                setTimeout(() => {
+                    playLevelUpEffect(s.id);
+                }, 50); 
+            }
+
             if (s.lv === 4 && pts >= t4 && !s.celebratedMax) {
                 s.celebratedMax = true;
                 setTimeout(() => { playCrispSound(); blossomFireworks(); alert(`🎊 恭喜！【${s.name}】的宠物【${s.petName}】已满级！`); }, 300);
             } else if (pts < t4) {
                 s.celebratedMax = false;
             }
+        }
+
+        // ================= 🌟 传说级·卡片专属晋级特效引擎 =================
+        function playLevelUpEffect(studentId) {
+            // 1. 播放超燃的“传说级和弦音效”
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const playTone = (freq, time) => {
+                    const osc = ctx.createOscillator(), gain = ctx.createGain();
+                    osc.connect(gain); gain.connect(ctx.destination); osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime + time);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime + time); 
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + time + 0.4);
+                    osc.start(ctx.currentTime + time); osc.stop(ctx.currentTime + time + 0.4);
+                };
+                playTone(523.25, 0); playTone(659.25, 0.1); playTone(783.99, 0.2); playTone(1046.50, 0.3);
+            } catch(e) {}
+
+            // 2. 定位卡片
+            const card = document.querySelector(`[data-id="${studentId}"]`);
+            if (!card) return;
+
+            // 3. 创建特效容器
+            const container = document.createElement('div');
+            container.className = 'absolute inset-0 pointer-events-none overflow-hidden rounded-[1.5rem] z-20';
+            container.style.cssText = `animation: radial-shine 0.8s ease-out forwards; border: 4px solid #fbbf24; box-shadow: 0 0 30px #fbbf24;`;
+            
+            // 4. 疯狂生成 80 个高对比度彩带和星星
+            const colors = ['#fbbf24', '#f43f5e', '#38bdf8', '#34d399', '#c084fc', '#ffffff', '#eab308'];
+            for(let i = 0; i < 80; i++) {
+                const piece = document.createElement('div');
+                const isStar = Math.random() > 0.6; 
+                const c = colors[Math.floor(Math.random() * colors.length)];
+                
+                const angle = Math.random() * Math.PI * 2; 
+                const dist = Math.random() * 250 + 100; 
+                const tx = Math.cos(angle) * dist + 'px';
+                const ty = Math.sin(angle) * dist + 'px';
+                const rot = (Math.random() - 0.5) * 1440 + 'deg'; 
+                
+                const size = Math.random() * 10 + (isStar ? 15 : 10); 
+                
+                piece.style.cssText = `
+                    position: absolute; left: 50%; top: 50%;
+                    width: ${size}px; height: ${size}px;
+                    background-color: ${isStar ? 'transparent' : c}; 
+                    border-radius: ${isStar ? '0' : '4px'}; opacity: 0;
+                    ${isStar ? `background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23${c.substr(1)}'%3E%3Cpath d='M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z'/%3E%3C/svg%3E"); background-size: contain; background-repeat: no-repeat;` : ''}
+                    animation: confetti-super-burst 1s cubic-bezier(0.1, 1, 0.3, 1) forwards;
+                    --tx: ${tx}; --ty: ${ty}; --rot: ${rot}; z-index: ${Math.random() > 0.5 ? 21 : 19};
+                `;
+                container.appendChild(piece);
+            }
+            
+            // 5. 巨大的金色 3D 中文 “升级！” 砸向卡片正中
+            const text = document.createElement('div');
+            text.innerHTML = '升级！'; 
+            text.style.cssText = `
+                position: absolute; left: 50%; top: 50%;
+                color: #ffffff; 
+                font-size: 3.2rem; /* 中文字体稍微再大一点 */
+                font-family: "Microsoft YaHei", "Heiti SC", sans-serif; font-weight: 900;
+                letter-spacing: 0.1rem; /* 中文不需要太宽的字间距 */
+                white-space: nowrap; 
+                background: linear-gradient(180deg, #fef3c7 0%, #fbbf24 50%, #f59e0b 100%);
+                -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+                -webkit-text-stroke: 1px #78350f;
+                filter: drop-shadow(0 5px 5px rgba(120, 53, 15, 0.8));
+                animation: evolve-text-slam 1.8s cubic-bezier(0.1, 1, 0.3, 1) forwards;
+                z-index: 30; 
+            `;
+            container.appendChild(text);
+
+            // 6. 1.8秒后优雅打扫卫生
+            card.appendChild(container);
+            setTimeout(() => container.remove(), 1800);
         }
         
         function updatePoints(id, amt, silent = false) { 
